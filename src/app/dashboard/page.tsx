@@ -11,15 +11,28 @@ export default async function DashboardPage({
   searchParams: Promise<{ tenant?: string }>;
 }) {
   const { tenant: queryTenantId } = await searchParams;
-  const store = getStore();
-  const tenants = await store.listTenants();
-  const selectedTenant = tenants.find((t) => t.id === queryTenantId) || tenants[0];
-
+  let tenants: any[] = [];
+  let selectedTenant: any = null;
+  let invoices: any[] = [];
+  let recentDispatches: any[] = [];
   const today = todayIST();
-  const [invoices, recentDispatches] = await Promise.all([
-    store.listInvoices(selectedTenant?.id),
-    store.listRecentDispatches(25, selectedTenant?.id),
-  ]);
+  let loadError: string | null = null;
+
+  try {
+    const store = getStore();
+    tenants = await store.listTenants();
+    selectedTenant = tenants.find((t) => t.id === queryTenantId) || tenants[0];
+
+    if (selectedTenant) {
+      [invoices, recentDispatches] = await Promise.all([
+        store.listInvoices(selectedTenant.id),
+        store.listRecentDispatches(25, selectedTenant.id),
+      ]);
+    }
+  } catch (err) {
+    console.error("[Dashboard Load Error]", err);
+    loadError = err instanceof Error ? err.message : String(err);
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 selection:bg-emerald-500 selection:text-slate-950">
@@ -61,7 +74,17 @@ export default async function DashboardPage({
           </p>
         </div>
 
-        {tenants.length === 0 ? (
+        {loadError ? (
+          <div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-8 text-center text-rose-300">
+            <h2 className="text-lg font-bold text-white mb-2">Database Connection Notice</h2>
+            <p className="text-sm max-w-xl mx-auto text-rose-200">
+              Failed to connect to configured Supabase database: {loadError}
+            </p>
+            <p className="text-xs text-slate-400 mt-4">
+              If you haven't run the SQL schema yet, open Supabase SQL Editor and execute <code>supabase/schema.sql</code>.
+            </p>
+          </div>
+        ) : tenants.length === 0 ? (
           <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-12 text-center">
             <h2 className="text-lg font-bold text-white">No tenants configured</h2>
             <p className="text-sm text-slate-400 mt-2">

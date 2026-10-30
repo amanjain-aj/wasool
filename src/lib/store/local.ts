@@ -18,13 +18,15 @@ const g = globalThis as unknown as { __wasoolLocalDb?: LocalDb };
 function load(): LocalDb {
   if (g.__wasoolLocalDb) return g.__wasoolLocalDb;
   try {
-    const parsed = JSON.parse(fs.readFileSync(DB_FILE, "utf8")) as LocalDb;
-    if (parsed.version === LOCAL_DB_VERSION) {
-      g.__wasoolLocalDb = parsed;
-      return parsed;
+    if (fs.existsSync(DB_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(DB_FILE, "utf8")) as LocalDb;
+      if (parsed && parsed.version === LOCAL_DB_VERSION) {
+        g.__wasoolLocalDb = parsed;
+        return parsed;
+      }
     }
   } catch {
-    /* no file yet / unreadable -> seed */
+    /* no file yet / unreadable / read-only filesystem -> fallback to memory seed */
   }
   g.__wasoolLocalDb = buildSeed();
   persist();
@@ -36,7 +38,7 @@ function persist() {
     fs.mkdirSync(DB_DIR, { recursive: true });
     fs.writeFileSync(DB_FILE, JSON.stringify(g.__wasoolLocalDb, null, 2));
   } catch {
-    /* read-only filesystem: keep in memory */
+    /* read-only filesystem (e.g. AWS Lambda / Vercel Serverless): keep in memory */
   }
 }
 
