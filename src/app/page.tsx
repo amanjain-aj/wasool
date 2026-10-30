@@ -23,12 +23,20 @@ export default function LandingPage() {
           <a href="#pricing" className="hover:text-white transition">Pricing (INR)</a>
           <a href="#partner-api" className="hover:text-white transition">Partner API (Khatabook/ERP)</a>
         </nav>
-        <Link
-          href="/dashboard"
-          className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-lg text-sm font-bold transition"
-        >
-          Start 14-Day Free Pilot
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/login"
+            className="text-xs font-semibold text-slate-300 hover:text-white px-3 py-2 transition"
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/signup"
+            className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-lg text-sm font-bold transition"
+          >
+            Start 14-Day Free Pilot
+          </Link>
+        </div>
       </header>
 
       {/* Hero Section */}

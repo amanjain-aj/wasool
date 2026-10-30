@@ -61,6 +61,12 @@ export default async function DashboardPage({
             >
               Public Site
             </Link>
+            <Link
+              href="/login"
+              className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:border-slate-700 transition"
+            >
+              Switch Account
+            </Link>
           </div>
         </div>
       </header>

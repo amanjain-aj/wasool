@@ -11,6 +11,7 @@
     "partner-key": "node scripts/create-partner-key.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.47.10",
     "@upstash/qstash": "^2.7.20",
     "lucide-react": "^0.468.0",
