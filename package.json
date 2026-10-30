@@ -1,0 +1,34 @@
+{
+  "name": "wasool-io",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Wasool.io — Autonomous WhatsApp A/R Recovery Engine & Embedded B2B API",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "partner-key": "node scripts/create-partner-key.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.47.10",
+    "@upstash/qstash": "^2.7.20",
+    "lucide-react": "^0.468.0",
+    "next": "^15.1.3",
+    "papaparse": "^5.4.1",
+    "qrcode": "^1.5.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/papaparse": "^5.3.15",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  }
+}

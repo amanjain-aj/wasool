@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# local demo datastore
+.data/
+
+# env
+.env
+.env.local
+.env.*.local
+
+npm-debug.log*
+.DS_Store
