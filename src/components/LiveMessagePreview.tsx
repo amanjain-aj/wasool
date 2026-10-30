@@ -70,7 +70,9 @@ export function LiveMessagePreview() {
                 key={s.tier}
                 onClick={() => setTierIdx(i)}
                 className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
-                  i === tierIdx ? "border-emerald-500 bg-emerald-500/10 text-emerald-300" : "border-slate-800 text-slate-400 hover:border-slate-600"
+                  i === tierIdx
+                    ? "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300"
+                    : "border-slate-300 text-slate-600 hover:border-slate-400 dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-600"
                 }`}
               >
                 {s.label}
@@ -78,21 +80,21 @@ export function LiveMessagePreview() {
             ))}
           </div>
         </div>
-        <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
+        <div className="rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950">
           <div className="label">Generated NPCI UPI intent</div>
-          <code className="block break-all text-xs text-emerald-400">{upi}</code>
+          <code className="block break-all text-xs font-mono text-emerald-600 dark:text-emerald-400">{upi}</code>
         </div>
       </div>
 
       <div className="space-y-4">
         <WhatsAppBubble sender={brand || "Your Business"} text={text} buttonHref={upi} />
-        <div className="flex items-center gap-4 rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-          <div className="rounded-lg bg-white p-1.5">
+        <div className="flex items-center gap-4 rounded-xl border border-slate-200 bg-slate-100/70 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+          <div className="rounded-lg bg-white p-1.5 shadow-sm">
             <UpiQr value={upi} size={112} />
           </div>
-          <p className="text-xs leading-relaxed text-slate-400">
-            On mobile, the button opens GPay / PhonePe / Paytm with <strong className="text-slate-200">₹{amountNum.toLocaleString("en-IN")}</strong> pre-filled.
-            On desktop, the payment page shows this QR. Template: <code className="text-emerald-400">{stage.templateName}</code>
+          <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+            On mobile, the button opens GPay / PhonePe / Paytm with <strong className="text-slate-900 dark:text-slate-200">₹{amountNum.toLocaleString("en-IN")}</strong> pre-filled.
+            On desktop, the payment page shows this QR. Template: <code className="text-emerald-600 dark:text-emerald-400">{stage.templateName}</code>
           </p>
         </div>
       </div>
