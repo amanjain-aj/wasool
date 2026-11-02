@@ -65,4 +65,18 @@ export interface WasoolStore {
   updateDispatchByMessageId(messageId: string, patch: DispatchPatch): Promise<boolean>;
 
   findPartnerKeyByHash(hash: string): Promise<PartnerApiKey | null>;
+
+  // v2.0 Munshi additions
+  findTenantByPhone(phone: string): Promise<Tenant | null>;
+  findStaffByPhone(phone: string): Promise<{ staff: any; tenant: Tenant } | null>;
+  findDebtorByPhone(phone: string): Promise<{ debtor: Debtor; activeInvoices: InvoiceWithRelations[] } | null>;
+  pauseDebtor(debtorId: string, untilDateISO: string): Promise<void>;
+  createReconciliation(input: {
+    invoice_id: string;
+    reported_amount_inr: number;
+    utr_or_cheque_number: string;
+    proof_media_url?: string | null;
+  }): Promise<any>;
+  getReconciliation(id: string): Promise<any | null>;
+  updateReconciliation(id: string, patch: any): Promise<void>;
 }

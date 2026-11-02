@@ -1,7 +1,14 @@
 // Domain types mirroring supabase/schema.sql
 
 export type TenantType = "DIRECT_BUSINESS" | "INTEGRATION_PARTNER";
-export type InvoiceStatus = "PENDING" | "PARTIALLY_PAID" | "PAID" | "DISPUTED" | "CANCELLED";
+export type InvoiceStatus =
+  | "PENDING"
+  | "PARTIALLY_PAID"
+  | "PAID"
+  | "DISPUTED"
+  | "CANCELLED"
+  | "AWAITING_OWNER_APPROVAL"
+  | "PAUSED";
 export type ReminderTier =
   | "T_MINUS_2_COURTESY"
   | "T_ZERO_DUE_DATE"
@@ -9,7 +16,9 @@ export type ReminderTier =
   | "T_PLUS_7_FORMAL_NOTICE"
   | "T_PLUS_15_SUSPENSION_ALERT";
 export type DeliveryStatus = "QUEUED" | "SENT" | "DELIVERED" | "READ" | "FAILED" | "SKIPPED";
-export type PlanTier = "starter" | "growth" | "partner_embedded";
+export type PlanTier = "starter" | "growth" | "partner_embedded" | "munshi_standard" | "munshi_vyapar_pro";
+export type BillDocType = "GST_INVOICE" | "DELIVERY_CHALLAN" | "KACCHA_ESTIMATE" | "VOICE_ENTRY";
+export type SettlementStatus = "PENDING_OWNER_CONFIRMATION" | "CONFIRMED" | "REJECTED";
 
 export interface Tenant {
   id: string;
@@ -24,7 +33,19 @@ export interface Tenant {
   upi_vpa: string;
   whatsapp_phone_number_id: string | null;
   plan_tier: PlanTier | string;
+  bank_account_details?: string | null;
+  preferred_language?: string | null;
+  morning_digest_enabled?: boolean;
   is_active: boolean;
+  created_at: string;
+}
+
+export interface TenantStaff {
+  id: string;
+  tenant_id: string;
+  staff_name: string;
+  staff_phone: string;
+  require_owner_approval: boolean;
   created_at: string;
 }
 
@@ -46,6 +67,7 @@ export interface Debtor {
   contact_person: string | null;
   phone: string;
   email: string | null;
+  is_paused_until?: string | null;
   created_at: string;
 }
 
@@ -63,6 +85,22 @@ export interface Invoice {
   payment_link_url: string | null;
   utr_reference: string | null;
   autopilot_enabled: boolean;
+  submitted_by_phone?: string | null;
+  doc_type?: BillDocType | null;
+  media_storage_url?: string | null;
+  media_mime_type?: string | null;
+  amount_kattauti_tds_inr?: number;
+  created_at: string;
+}
+
+export interface PaymentReconciliation {
+  id: string;
+  invoice_id: string;
+  reported_amount_inr: number;
+  utr_or_cheque_number: string | null;
+  proof_media_url?: string | null;
+  status: SettlementStatus;
+  confirmed_at?: string | null;
   created_at: string;
 }
 

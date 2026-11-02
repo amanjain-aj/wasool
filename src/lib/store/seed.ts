@@ -13,6 +13,8 @@ export interface LocalDb {
   debtors: Debtor[];
   invoices: Invoice[];
   reminder_dispatches: ReminderDispatch[];
+  tenant_staff?: any[];
+  payment_reconciliations?: any[];
 }
 
 export const LOCAL_DB_VERSION = 1;

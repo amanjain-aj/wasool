@@ -272,6 +272,72 @@ export function createLocalStore(): WasoolStore {
     async findPartnerKeyByHash(hash) {
       return clone(load().partner_api_keys.find((k) => k.api_key_hash === hash) ?? null);
     },
+
+    async findTenantByPhone(phone: string) {
+      const clean = phone.replace(/\D/g, "");
+      const t = load().tenants.find((x) => x.owner_phone.replace(/\D/g, "").endsWith(clean.slice(-10)));
+      return clone(t ?? null);
+    },
+
+    async findStaffByPhone(phone: string) {
+      const db = load();
+      const clean = phone.replace(/\D/g, "");
+      const s = (db.tenant_staff || []).find((x) => x.staff_phone.replace(/\D/g, "").endsWith(clean.slice(-10)));
+      if (!s) return null;
+      const t = db.tenants.find((x) => x.id === s.tenant_id);
+      return t ? { staff: clone(s), tenant: clone(t) } : null;
+    },
+
+    async findDebtorByPhone(phone: string) {
+      const db = load();
+      const clean = phone.replace(/\D/g, "");
+      const d = db.debtors.find((x) => x.phone.replace(/\D/g, "").endsWith(clean.slice(-10)));
+      if (!d) return null;
+      const active = db.invoices
+        .filter((i) => i.debtor_id === d.id && (i.status === "PENDING" || i.status === "PARTIALLY_PAID"))
+        .map((i) => withRelations(db, i));
+      return { debtor: clone(d), activeInvoices: active };
+    },
+
+    async pauseDebtor(debtorId: string, untilDateISO: string) {
+      const db = load();
+      const d = db.debtors.find((x) => x.id === debtorId);
+      if (d) {
+        d.is_paused_until = untilDateISO;
+        persist();
+      }
+    },
+
+    async createReconciliation(input: any) {
+      const db = load();
+      if (!db.payment_reconciliations) db.payment_reconciliations = [];
+      const rec = {
+        id: randomUUID(),
+        invoice_id: input.invoice_id,
+        reported_amount_inr: input.reported_amount_inr,
+        utr_or_cheque_number: input.utr_or_cheque_number,
+        proof_media_url: input.proof_media_url ?? null,
+        status: "PENDING_OWNER_CONFIRMATION",
+        created_at: new Date().toISOString()
+      };
+      db.payment_reconciliations.push(rec);
+      persist();
+      return clone(rec);
+    },
+
+    async getReconciliation(id: string) {
+      const db = load();
+      return clone((db.payment_reconciliations || []).find((r) => r.id === id) ?? null);
+    },
+
+    async updateReconciliation(id: string, patch: any) {
+      const db = load();
+      const r = (db.payment_reconciliations || []).find((x) => x.id === id);
+      if (r) {
+        Object.assign(r, patch);
+        persist();
+      }
+    }
   };
 }
 

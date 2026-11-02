@@ -11,9 +11,11 @@
     "partner-key": "node scripts/create-partner-key.mjs"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.47.10",
     "@upstash/qstash": "^2.7.20",
+    "axios": "^1.21.0",
     "lucide-react": "^0.468.0",
     "next": "^15.1.3",
     "papaparse": "^5.4.1",

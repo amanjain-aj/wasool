@@ -177,5 +177,50 @@ export function createSupabaseStore(url: string, serviceRoleKey: string): Wasool
         "findPartnerKeyByHash",
       );
     },
+
+    async findTenantByPhone(phone: string) {
+      const clean = phone.replace(/\D/g, "").slice(-10);
+      const { data } = await db.from("tenants").select("*").ilike("owner_phone", `%${clean}%`).limit(1).maybeSingle();
+      return data || null;
+    },
+
+    async findStaffByPhone(phone: string) {
+      const clean = phone.replace(/\D/g, "").slice(-10);
+      const { data: staff } = await db.from("tenant_staff").select("*").ilike("staff_phone", `%${clean}%`).limit(1).maybeSingle();
+      if (!staff) return null;
+      const { data: tenant } = await db.from("tenants").select("*").eq("id", staff.tenant_id).maybeSingle();
+      return tenant ? { staff, tenant } : null;
+    },
+
+    async findDebtorByPhone(phone: string) {
+      const clean = phone.replace(/\D/g, "").slice(-10);
+      const { data: debtor } = await db.from("debtors").select("*").ilike("phone", `%${clean}%`).limit(1).maybeSingle();
+      if (!debtor) return null;
+      const { data: invoices } = await db
+        .from("invoices")
+        .select(INVOICE_WITH_RELATIONS)
+        .eq("debtor_id", debtor.id)
+        .in("status", ["PENDING", "PARTIALLY_PAID"]);
+      return { debtor, activeInvoices: (invoices || []).map(normRelations) };
+    },
+
+    async pauseDebtor(debtorId: string, untilDateISO: string) {
+      await db.from("debtors").update({ is_paused_until: untilDateISO }).eq("id", debtorId);
+    },
+
+    async createReconciliation(input: any) {
+      const { data, error } = await db.from("payment_reconciliations").insert(input).select().single();
+      if (error) throw new Error(error.message);
+      return data;
+    },
+
+    async getReconciliation(id: string) {
+      const { data } = await db.from("payment_reconciliations").select("*").eq("id", id).maybeSingle();
+      return data || null;
+    },
+
+    async updateReconciliation(id: string, patch: any) {
+      await db.from("payment_reconciliations").update(patch).eq("id", id);
+    }
   };
 }

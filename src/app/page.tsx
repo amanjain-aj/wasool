@@ -46,18 +46,18 @@ export default function LandingPage() {
       <section className="max-w-4xl mx-auto px-6 pt-16 md:pt-24 pb-16 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 mb-6 shadow-sm">
           <ShieldCheck className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
-          <span>100% Meta Official WhatsApp Business API Compliant</span>
+          <span>Apka 24/7 Headless Digital Tagada Munshi on WhatsApp</span>
         </div>
 
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.15] mb-6 text-slate-900 dark:text-white">
-          Stop begging clients to clear their invoices. <br />
+          Apka 24/7 Digital Tagada Munshi on WhatsApp. <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-400 dark:to-teal-300">
-            Put WhatsApp recovery on autopilot.
+            Forward a bill photo, PDF, or 5-second voice note.
           </span>
         </h1>
 
         <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Wasool sends polite, audit-framed WhatsApp reminders with 1-tap UPI intent links. Recover your stuck working capital 2.5x faster without awkward phone calls.
+          Wasool politely chases your client with proof-attached reminders and 1-tap UPI deep links until the money hits your bank account. Zero dashboard required.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -65,7 +65,7 @@ export default function LandingPage() {
             href="/signup"
             className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-8 py-4 rounded-xl font-bold text-base transition shadow-lg shadow-emerald-500/25 active:scale-[0.98]"
           >
-            <span>Upload Overdue Excel / Connect Zoho</span>
+            <span>Start Munshi Free (14-Day Pilot)</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
           <a
@@ -84,9 +84,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-5">
               <Zap className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">1-Tap UPI Deep Links</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Forward &amp; Forget (Photo, PDF &amp; Voice)</h3>
             <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-              Bypass the 30-minute NEFT beneficiary cooling period. Clients tap once on WhatsApp to open GPay, PhonePe, or Paytm with your exact invoice amount pre-filled.
+              Dispatch staff or owners simply WhatsApp a paper bill photo, PDF, or a Hinglish voice note (&quot;Sharma ji ko 15 din ka udhaar&quot;). Gemini AI auto-schedules the recovery.
             </p>
           </div>
 
@@ -94,9 +94,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center mb-5">
               <Receipt className="w-6 h-6 text-teal-600 dark:text-teal-400" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Diplomatic Audit Framing</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Proof-First Reminders</h3>
             <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-              Protect your client relationships. Messages are written as routine &quot;monthly ledger reconciliations&quot; from your accounts desk—never rude debt collection threats.
+              Every WhatsApp reminder attaches the original bill photo or PDF copy in the header. Eliminates the awkward &quot;Bill ki copy nahi mili&quot; delay tactic permanently.
             </p>
           </div>
 
@@ -104,9 +104,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-5">
               <PhoneOff className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Zero Manual Chasing</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">UTR Screenshot &amp; Kattauti Reconciliation</h3>
             <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-              Automatically escalates from T-2 courtesy notices to T+15 formal holds at 10:30 AM IST. Halts the exact second payment or UTR is recorded.
+              When a buyer forwards a payment screenshot or cheque, Vision AI extracts the UTR, prompts the owner to confirm, and recalculates TDS/part-payment math automatically.
             </p>
           </div>
         </div>
@@ -130,27 +130,28 @@ export default function LandingPage() {
       {/* Pricing Section */}
       <section id="pricing" className="max-w-4xl mx-auto px-6 py-20 border-t border-slate-200 dark:border-slate-900">
         <div className="text-center mb-14">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">ROI-Guaranteed INR Pricing</h2>
-          <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">Recover a single delayed ₹25,000 invoice and Wasool pays for itself for the entire year.</p>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">ROI-Guaranteed Indian B2B Pricing</h2>
+          <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">Recover a single delayed ₹25,000 bill and Wasool Munshi pays for itself for the entire year.</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 flex flex-col justify-between shadow-sm hover:shadow-md transition">
             <div>
-              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Service Agencies &amp; MSMEs</span>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-1">Starter</h3>
+              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Traders, Contractors &amp; MSMEs</span>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-1">Munshi Standard</h3>
               <div className="mt-4 flex items-baseline text-slate-900 dark:text-white">
-                <span className="text-4xl font-extrabold">₹1,499</span>
+                <span className="text-4xl font-extrabold">₹999</span>
                 <span className="text-slate-500 dark:text-slate-400 text-sm ml-2">/ month</span>
               </div>
               <ul className="mt-6 space-y-3 text-sm text-slate-600 dark:text-slate-300">
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Up to 100 active invoices/month</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> 5-stage WhatsApp escalation workflow</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Dynamic UPI QR &amp; Intent links</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> CSV / Excel upload &amp; Razorpay sync</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Up to 100 active credit bills/month</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Photo, PDF &amp; Voice Note WhatsApp Ingestion</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Original Bill Attachment in Template Header</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> 09:30 AM Morning Tagada WhatsApp Digest</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> 1-Tap Pause Debtor for 3 Days</li>
               </ul>
             </div>
-            <Link href="/signup?plan=starter" className="mt-8 block text-center bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white font-semibold py-3 rounded-xl transition text-sm">
+            <Link href="/signup?plan=munshi_standard" className="mt-8 block text-center bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white font-semibold py-3 rounded-xl transition text-sm">
               Start 14-Day Free Trial
             </Link>
           </div>
@@ -160,20 +161,21 @@ export default function LandingPage() {
               Most Popular
             </span>
             <div>
-              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Scaling Enterprises</span>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-1">Growth</h3>
+              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Scaling Manufacturers &amp; Agencies</span>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-1">Munshi Vyapar Pro</h3>
               <div className="mt-4 flex items-baseline text-slate-900 dark:text-white">
-                <span className="text-4xl font-extrabold">₹3,999</span>
+                <span className="text-4xl font-extrabold">₹2,499</span>
                 <span className="text-slate-500 dark:text-slate-400 text-sm ml-2">/ month</span>
               </div>
               <ul className="mt-6 space-y-3 text-sm text-slate-600 dark:text-slate-300">
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Up to 400 active invoices/month</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> 2-Way Zoho Books &amp; Tally Connector</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Custom Verified WhatsApp Brand Name</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Automated UTR Screenshot Parser</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Up to 350 active credit bills/month</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Custom Branded Verified WhatsApp Sender ID</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Up to 5 Dispatch Staff / Clerk Phone numbers</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Interactive Owner Approval Card on WhatsApp</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Monthly CA-ready UTR &amp; TDS Excel Export</li>
               </ul>
             </div>
-            <Link href="/signup?plan=growth" className="mt-8 block text-center bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition text-sm shadow-md shadow-emerald-500/20">
+            <Link href="/signup?plan=munshi_vyapar_pro" className="mt-8 block text-center bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition text-sm shadow-md shadow-emerald-500/20">
               Start 14-Day Free Trial
             </Link>
           </div>
