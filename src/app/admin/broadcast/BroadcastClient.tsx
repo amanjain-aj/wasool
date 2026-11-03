@@ -51,7 +51,7 @@ export function BroadcastClient({ registeredCount }: { registeredCount: number }
         </div>
       )}
 
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+      <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 p-6 shadow-sm">
         <form onSubmit={handleSendBroadcast} className="space-y-5">
           <div>
             <label className="label">Target Audience</label>
@@ -89,8 +89,8 @@ export function BroadcastClient({ registeredCount }: { registeredCount: number }
             />
           </div>
 
-          <div className="rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 text-xs text-sky-300 flex items-start gap-2">
-            <Info className="h-4 w-4 shrink-0 text-sky-400 mt-0.5" />
+          <div className="rounded-xl border border-sky-500/20 bg-sky-500/5 p-4 text-xs text-sky-800 dark:text-sky-300 flex items-start gap-2">
+            <Info className="h-4 w-4 shrink-0 text-sky-500 dark:text-sky-400 mt-0.5" />
             <div>
               Messages are dispatched via the official Meta WhatsApp Cloud API queue. If live Meta keys are not configured, dispatches run in Dry-Run simulation mode.
             </div>

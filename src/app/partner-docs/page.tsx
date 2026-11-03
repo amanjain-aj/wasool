@@ -12,7 +12,7 @@ export default function PartnerDocsPage() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-12">
       <header className="mb-10 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-black tracking-tight text-white">
+        <Link href="/" className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
           Wasool<span className="text-emerald-500">.io</span>
           <span className="ml-2 text-sm font-semibold text-slate-500">Partner API</span>
         </Link>
@@ -20,28 +20,28 @@ export default function PartnerDocsPage() {
       </header>
 
       <section className="space-y-4">
-        <h1 className="text-3xl font-bold text-white">Embedded Autopilot Collections</h1>
-        <p className="max-w-3xl text-sm leading-relaxed text-slate-400">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Embedded Autopilot Collections</h1>
+        <p className="max-w-3xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
           Bookkeeping platforms (Khatabook, myBillBook, Vyapar, Swipe) integrate Wasool as a white-label background worker with two REST endpoints.
-          Call <code className="text-emerald-400">/sync</code> when a merchant toggles &quot;Auto-Remind&quot; on an invoice, and <code className="text-emerald-400">/settle</code> when
+          Call <code className="text-emerald-600 dark:text-emerald-400">/sync</code> when a merchant toggles &quot;Auto-Remind&quot; on an invoice, and <code className="text-emerald-600 dark:text-emerald-400">/settle</code> when
           the invoice is paid. We handle Meta template compliance, the 10:30 AM IST escalation queue and UPI deep-link generation.
         </p>
       </section>
 
       <section className="mt-10 grid gap-6 md:grid-cols-2">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-          <h2 className="font-bold text-white">Authentication</h2>
-          <p className="mt-2 text-sm text-slate-400">Every request carries your partner key. Keys are stored only as SHA-256 hashes and are bound to your <code>partner_id</code>.</p>
+        <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 p-6 shadow-sm">
+          <h2 className="font-bold text-slate-900 dark:text-white">Authentication</h2>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Every request carries your partner key. Keys are stored only as SHA-256 hashes and are bound to your <code>partner_id</code>.</p>
           <Code>{`Authorization: Bearer wsl_live_xxxxxxxxxxxxxxxx
 Content-Type: application/json`}</Code>
         </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-          <h2 className="font-bold text-white">Escalation schedule</h2>
+        <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 p-6 shadow-sm">
+          <h2 className="font-bold text-slate-900 dark:text-white">Escalation schedule</h2>
           <ul className="mt-3 space-y-1.5 text-sm">
             {ESCALATION_STAGES.map((s) => (
-              <li key={s.tier} className="flex justify-between gap-4 text-slate-300">
+              <li key={s.tier} className="flex justify-between gap-4 text-slate-700 dark:text-slate-300">
                 <span>{s.label}</span>
-                <code className="text-xs text-emerald-400">{s.templateName}</code>
+                <code className="text-xs text-emerald-600 dark:text-emerald-400 font-mono">{s.templateName}</code>
               </li>
             ))}
           </ul>
@@ -50,11 +50,11 @@ Content-Type: application/json`}</Code>
       </section>
 
       <section className="mt-10 space-y-4">
-        <h2 className="text-xl font-bold text-white">
-          <span className="mr-2 rounded bg-emerald-500/15 px-2 py-0.5 font-mono text-sm text-emerald-400">POST</span>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          <span className="mr-2 rounded bg-emerald-500/15 px-2 py-0.5 font-mono text-sm text-emerald-600 dark:text-emerald-400">POST</span>
           /api/v1/partner/invoices/sync
         </h2>
-        <p className="text-sm text-slate-400">Upserts the merchant, debtor and invoice (idempotent on <code>merchant.id</code> and <code>invoice.number</code>), generates the UPI intent and (re)schedules reminders.</p>
+        <p className="text-sm text-slate-600 dark:text-slate-400">Upserts the merchant, debtor and invoice (idempotent on <code>merchant.id</code> and <code>invoice.number</code>), generates the UPI intent and (re)schedules reminders.</p>
         <div className="grid gap-4 md:grid-cols-2">
           <Code>{`// Request
 {
@@ -102,11 +102,11 @@ Content-Type: application/json`}</Code>
       </section>
 
       <section className="mt-10 space-y-4">
-        <h2 className="text-xl font-bold text-white">
-          <span className="mr-2 rounded bg-emerald-500/15 px-2 py-0.5 font-mono text-sm text-emerald-400">POST</span>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          <span className="mr-2 rounded bg-emerald-500/15 px-2 py-0.5 font-mono text-sm text-emerald-600 dark:text-emerald-400">POST</span>
           /api/v1/partner/invoices/settle
         </h2>
-        <p className="text-sm text-slate-400">Marks the invoice <code>PAID</code>, records the UTR and deletes all queued reminders. Send <code>amount_paid</code> below the pending amount to record a part-payment (reminders continue for the balance).</p>
+        <p className="text-sm text-slate-600 dark:text-slate-400">Marks the invoice <code>PAID</code>, records the UTR and deletes all queued reminders. Send <code>amount_paid</code> below the pending amount to record a part-payment (reminders continue for the balance).</p>
         <div className="grid gap-4 md:grid-cols-2">
           <Code>{`{
   "partner_id": "khatabook",
@@ -126,7 +126,7 @@ Content-Type: application/json`}</Code>
       </section>
 
       <section className="mt-12">
-        <h2 className="mb-4 text-xl font-bold text-white">Live playground</h2>
+        <h2 className="mb-4 text-xl font-bold text-slate-900 dark:text-white">Live playground</h2>
         <ApiPlayground />
       </section>
     </main>

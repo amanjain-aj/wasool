@@ -42,8 +42,8 @@ export function SettleForm({
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <p className="text-sm text-slate-400">
-        {invoice.debtor.client_name} • {invoice.invoice_number} • Pending <strong className="text-white">₹{formatINR(invoice.amount_pending_inr)}</strong>
+      <p className="text-sm text-slate-600 dark:text-slate-400">
+        {invoice.debtor.client_name} • {invoice.invoice_number} • Pending <strong className="text-slate-900 dark:text-white font-bold">₹{formatINR(invoice.amount_pending_inr)}</strong>
       </p>
       <div>
         <label className="label">UPI / bank UTR reference</label>

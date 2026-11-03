@@ -21,25 +21,25 @@ export default async function PayPage({ params }: { params: Promise<{ id: string
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
-      <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8 text-center">
-        <div className="text-xs font-semibold uppercase tracking-widest text-slate-400">Payment request from</div>
-        <h1 className="mt-1 text-2xl font-bold text-white">{inv.tenant.brand_display_name}</h1>
+      <div className="rounded-3xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 p-8 text-center shadow-xl">
+        <div className="text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">Payment request from</div>
+        <h1 className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">{inv.tenant.brand_display_name}</h1>
         {inv.tenant.gstin && <div className="mt-1 text-xs text-slate-500">GSTIN {inv.tenant.gstin}</div>}
 
-        <div className="my-6 rounded-2xl bg-slate-950 p-5">
-          <div className="text-xs text-slate-400">Invoice #{inv.invoice_number} • Due {formatDateIN(inv.due_date)}</div>
-          <div className="mt-2 text-4xl font-extrabold text-white">₹{formatINR(paid ? inv.amount_total_inr : inv.amount_pending_inr)}</div>
+        <div className="my-6 rounded-2xl bg-slate-50 dark:bg-slate-950 p-5 border border-slate-200 dark:border-transparent">
+          <div className="text-xs text-slate-500 dark:text-slate-400">Invoice #{inv.invoice_number} • Due {formatDateIN(inv.due_date)}</div>
+          <div className="mt-2 text-4xl font-extrabold text-slate-900 dark:text-white">₹{formatINR(paid ? inv.amount_total_inr : inv.amount_pending_inr)}</div>
           <div className="mt-1 text-xs text-slate-500">Billed to {inv.debtor?.client_name || "Client"}</div>
         </div>
 
         {paid ? (
-          <div className="flex flex-col items-center gap-2 text-emerald-400">
+          <div className="flex flex-col items-center gap-2 text-emerald-600 dark:text-emerald-400">
             <CheckCircle2 className="h-10 w-10" />
             <div className="font-semibold">Paid — thank you!</div>
-            {inv.utr_reference && <div className="text-xs text-slate-400">UTR {inv.utr_reference}</div>}
+            {inv.utr_reference && <div className="text-xs text-slate-500 dark:text-slate-400">UTR {inv.utr_reference}</div>}
           </div>
         ) : closed ? (
-          <div className="text-sm text-slate-400">This invoice has been cancelled. No payment is due.</div>
+          <div className="text-sm text-slate-500 dark:text-slate-400">This invoice has been cancelled. No payment is due.</div>
         ) : (
           <>
             <a href={inv.payment_link_url ?? "#"} className="btn-primary w-full py-4 text-base">
@@ -48,12 +48,12 @@ export default async function PayPage({ params }: { params: Promise<{ id: string
             <p className="mt-2 text-xs text-slate-500">GPay • PhonePe • Paytm • BHIM — amount pre-filled</p>
             {inv.payment_link_url && (
               <div className="mt-6 flex flex-col items-center gap-2">
-                <div className="rounded-xl bg-white p-2">
+                <div className="rounded-xl bg-white p-2 border border-slate-200 dark:border-transparent shadow-sm">
                   <UpiQr value={inv.payment_link_url} size={180} />
                 </div>
                 <div className="text-xs text-slate-500">On desktop? Scan with your phone&apos;s UPI app.</div>
                 <div className="text-xs text-slate-500">
-                  Paying to <span className="font-mono text-slate-300">{inv.tenant.upi_vpa}</span>
+                  Paying to <span className="font-mono text-slate-800 dark:text-slate-300 font-medium">{inv.tenant.upi_vpa}</span>
                 </div>
               </div>
             )}
@@ -61,7 +61,7 @@ export default async function PayPage({ params }: { params: Promise<{ id: string
           </>
         )}
       </div>
-      <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-slate-600">
+      <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-slate-500 dark:text-slate-600">
         <ShieldCheck className="h-3.5 w-3.5" /> Secured by NPCI UPI • Powered by Wasool.io
       </div>
     </main>

@@ -73,7 +73,7 @@ export function SettingsClient({ tenant }: { tenant: Tenant }) {
         </div>
       )}
 
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl">
+      <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 p-6 shadow-xl">
         <form onSubmit={handleSave} className="space-y-5">
           <div>
             <label className="label">Legal Registered Business Name</label>
@@ -159,8 +159,8 @@ export function SettingsClient({ tenant }: { tenant: Tenant }) {
             </div>
           </div>
 
-          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-xs text-emerald-300 flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-400" />
+          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-xs text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
             <span>
               Saving your UPI ID validates your registration and activates automated 10:30 AM WhatsApp escalations.
             </span>

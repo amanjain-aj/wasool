@@ -129,12 +129,12 @@ export function CsvImporter({ tenantId, onDone }: { tenantId: string; onDone: ()
         }}
         onClick={() => fileRef.current?.click()}
         className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-8 text-center transition ${
-          dragging ? "border-emerald-500 bg-emerald-500/5" : "border-slate-700 hover:border-slate-500"
+          dragging ? "border-emerald-500 bg-emerald-500/5" : "border-slate-300 hover:border-slate-400 dark:border-slate-700 dark:hover:border-slate-500"
         }`}
       >
-        <FileSpreadsheet className="h-8 w-8 text-emerald-400" />
-        <div className="text-sm font-semibold text-white">{fileName || "Drop your overdue invoices CSV here"}</div>
-        <div className="text-xs text-slate-500">or click to browse • Tally / Zoho / Excel exports (save as CSV)</div>
+        <FileSpreadsheet className="h-8 w-8 text-emerald-500 dark:text-emerald-400" />
+        <div className="text-sm font-semibold text-slate-900 dark:text-white">{fileName || "Drop your overdue invoices CSV here"}</div>
+        <div className="text-xs text-slate-500 dark:text-slate-400">or click to browse • Tally / Zoho / Excel exports (save as CSV)</div>
         <input
           ref={fileRef}
           type="file"
@@ -160,9 +160,9 @@ export function CsvImporter({ tenantId, onDone }: { tenantId: string; onDone: ()
 
       {rows.length > 0 && !result && (
         <div className="space-y-3">
-          <div className="max-h-56 overflow-auto rounded-lg border border-slate-800">
+          <div className="max-h-56 overflow-auto rounded-lg border border-slate-200 dark:border-slate-800">
             <table className="w-full text-left text-xs">
-              <thead className="sticky top-0 bg-slate-900 text-slate-400">
+              <thead className="sticky top-0 bg-slate-100 text-slate-700 dark:bg-slate-900 dark:text-slate-400">
                 <tr>
                   <th className="px-3 py-2">Client</th>
                   <th className="px-3 py-2">Phone</th>
@@ -171,13 +171,13 @@ export function CsvImporter({ tenantId, onDone }: { tenantId: string; onDone: ()
                   <th className="px-3 py-2">Due</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 text-slate-300">
+              <tbody className="divide-y divide-slate-200 text-slate-700 dark:divide-slate-800 dark:text-slate-300">
                 {rows.slice(0, 50).map((r, i) => (
-                  <tr key={i}>
-                    <td className="px-3 py-1.5">{r.client_name}</td>
+                  <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                    <td className="px-3 py-1.5 font-medium">{r.client_name}</td>
                     <td className="px-3 py-1.5">{r.phone}</td>
-                    <td className="px-3 py-1.5">{r.invoice_number}</td>
-                    <td className="px-3 py-1.5 text-right">{String(r.amount_pending || r.amount_total)}</td>
+                    <td className="px-3 py-1.5 font-mono text-emerald-600 dark:text-emerald-400">{r.invoice_number}</td>
+                    <td className="px-3 py-1.5 text-right font-medium">{String(r.amount_pending || r.amount_total)}</td>
                     <td className="px-3 py-1.5">{r.due_date}</td>
                   </tr>
                 ))}
@@ -192,12 +192,12 @@ export function CsvImporter({ tenantId, onDone }: { tenantId: string; onDone: ()
       )}
 
       {result && (
-        <div className="space-y-2 rounded-lg border border-slate-800 bg-slate-950 p-4 text-sm">
-          <div className="text-emerald-400">✓ {result.imported} imported and scheduled</div>
+        <div className="space-y-2 rounded-lg border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950 p-4 text-sm">
+          <div className="text-emerald-600 dark:text-emerald-400 font-semibold">✓ {result.imported} imported and scheduled</div>
           {result.failed > 0 && (
             <>
-              <div className="text-rose-400">✕ {result.failed} rejected</div>
-              <ul className="max-h-40 space-y-1 overflow-auto text-xs text-slate-400">
+              <div className="text-rose-600 dark:text-rose-400 font-semibold">✕ {result.failed} rejected</div>
+              <ul className="max-h-40 space-y-1 overflow-auto text-xs text-slate-600 dark:text-slate-400">
                 {result.errors.map((e) => (
                   <li key={e.row}>
                     Row {e.row} {e.invoice_number ? `(${e.invoice_number})` : ""}: {e.error}

@@ -61,12 +61,12 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
       )}
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
-        <div className="flex items-center gap-2 max-w-sm w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs">
-          <Search className="h-4 w-4 text-slate-500" />
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 p-4 shadow-sm">
+        <div className="flex items-center gap-2 max-w-sm w-full rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950 px-3 py-2 text-xs">
+          <Search className="h-4 w-4 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
-            className="w-full bg-transparent text-white placeholder:text-slate-600 focus:outline-none"
+            className="w-full bg-transparent text-slate-900 placeholder:text-slate-400 dark:text-white dark:placeholder:text-slate-600 focus:outline-none"
             placeholder="Search business name, phone, or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -75,7 +75,7 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
 
         <div className="flex flex-wrap items-center gap-3">
           <select
-            className="rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-300 focus:outline-none"
+            className="rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 focus:outline-none"
             value={filterRegistration}
             onChange={(e) => setFilterRegistration(e.target.value)}
           >
@@ -85,7 +85,7 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
           </select>
 
           <select
-            className="rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-300 focus:outline-none"
+            className="rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 focus:outline-none"
             value={filterPlan}
             onChange={(e) => setFilterPlan(e.target.value)}
           >
@@ -100,10 +100,10 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
       </div>
 
       {/* Tenants Table */}
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+      <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-950/80 text-slate-400">
+            <thead className="bg-slate-50 text-slate-600 dark:bg-slate-950/80 dark:text-slate-400">
               <tr>
                 <th className="px-4 py-3 font-semibold">Business / Owner</th>
                 <th className="px-4 py-3 font-semibold">Phone &amp; Email</th>
@@ -114,7 +114,7 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
                 <th className="px-4 py-3 font-semibold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 text-slate-300">
+            <tbody className="divide-y divide-slate-200 text-slate-700 dark:divide-slate-800/60 dark:text-slate-300">
               {filtered.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
@@ -127,26 +127,26 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
                   const isBusy = updatingId === t.id;
 
                   return (
-                    <tr key={t.id} className="hover:bg-slate-800/30 transition">
+                    <tr key={t.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
                       <td className="px-4 py-3">
-                        <div className="font-bold text-white">{t.business_name}</div>
-                        <div className="text-[11px] text-slate-400">{t.brand_display_name}</div>
+                        <div className="font-bold text-slate-900 dark:text-white">{t.business_name}</div>
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400">{t.brand_display_name}</div>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="font-mono text-white">{t.owner_phone}</div>
+                        <div className="font-mono text-slate-900 dark:text-white font-medium">{t.owner_phone}</div>
                         <div className="text-[11px] text-slate-500">{t.owner_email}</div>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="font-mono text-emerald-400">{t.upi_vpa || "Not configured"}</div>
+                        <div className="font-mono text-emerald-600 dark:text-emerald-400 font-medium">{t.upi_vpa || "Not configured"}</div>
                         <div className="text-[10px] text-slate-500">{t.gstin || "No GSTIN"}</div>
                       </td>
                       <td className="px-4 py-3">
                         {isRegistered ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
                             <CheckCircle2 className="h-3 w-3" /> REGISTERED
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-400">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400">
                             <XCircle className="h-3 w-3" /> GATED (INCOMPLETE)
                           </span>
                         )}
@@ -156,7 +156,7 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
                       </td>
                       <td className="px-4 py-3">
                         <select
-                          className="rounded-lg border border-slate-800 bg-slate-950 px-2 py-1 text-xs text-white"
+                          className="rounded-lg border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950 px-2 py-1 text-xs text-slate-900 dark:text-white"
                           value={t.subscription_plan || t.plan_tier || "FREE_TRIAL"}
                           disabled={isBusy}
                           onChange={(e) => updateTenantStatus(t.id, { subscription_plan: e.target.value })}
@@ -171,11 +171,11 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
                       <td className="px-4 py-3">
                         {t.usage ? (
                           <div>
-                            <div className="flex items-center gap-1.5 font-bold text-white">
+                            <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
                               <span>{t.usage.billsUsedThisMonth} / {t.usage.billsLimit}</span>
-                              <span className="text-[10px] text-slate-400 font-normal">({t.usage.usagePercentage}%)</span>
+                              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-normal">({t.usage.usagePercentage}%)</span>
                             </div>
-                            <div className="mt-1 w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                            <div className="mt-1 w-24 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
                               <div
                                 className={`h-full rounded-full ${
                                   t.usage.usagePercentage > 90
@@ -199,8 +199,8 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
                             disabled={isBusy}
                             className={`rounded-lg px-2.5 py-1 text-[11px] font-bold transition ${
                               isRegistered
-                                ? "bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20"
-                                : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20"
+                                ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 hover:bg-amber-500/20"
+                                : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20"
                             }`}
                           >
                             {isRegistered ? "Block / Gate" : "Approve & Activate"}

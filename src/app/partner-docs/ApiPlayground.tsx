@@ -68,7 +68,7 @@ export function ApiPlayground() {
   }
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+    <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 p-6 shadow-sm">
       <div className="mb-4 flex flex-wrap items-center gap-3">
         {(["sync", "settle"] as Endpoint[]).map((e) => (
           <button
@@ -77,7 +77,11 @@ export function ApiPlayground() {
               setEndpoint(e);
               setResponse(null);
             }}
-            className={`rounded-lg px-3 py-1.5 font-mono text-xs font-semibold ${endpoint === e ? "bg-emerald-500 text-slate-950" : "bg-slate-800 text-slate-300"}`}
+            className={`rounded-lg px-3 py-1.5 font-mono text-xs font-semibold transition ${
+              endpoint === e
+                ? "bg-emerald-500 text-slate-950"
+                : "border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 dark:border-transparent dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+            }`}
           >
             POST /invoices/{e}
           </button>

@@ -67,16 +67,16 @@ export function LoginForm() {
   }
 
   return (
-    <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-8 shadow-2xl backdrop-blur-md">
+    <div className="rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-2xl backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/70">
       {error && (
-        <div className="mb-6 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3.5 text-xs text-rose-300">
+        <div className="mb-6 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3.5 text-xs text-rose-600 dark:text-rose-300">
           {error}
         </div>
       )}
 
       {message && (
-        <div className="mb-6 flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs text-emerald-300">
-          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+        <div className="mb-6 flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs text-emerald-700 dark:text-emerald-300">
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500 dark:text-emerald-400" />
           <span>{message}</span>
         </div>
       )}
@@ -86,7 +86,7 @@ export function LoginForm() {
           <div>
             <label className="label">Registered Work Email</label>
             <div className="relative">
-              <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-500" />
+              <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
               <input
                 type="email"
                 required
@@ -107,9 +107,9 @@ export function LoginForm() {
             Continue with Email OTP
           </button>
 
-          <div className="pt-2 text-center text-xs text-slate-400">
+          <div className="pt-2 text-center text-xs text-slate-500 dark:text-slate-400">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="font-semibold text-emerald-400 hover:underline">
+            <Link href="/signup" className="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
               Start 14-Day Free Pilot
             </Link>
           </div>
@@ -122,13 +122,13 @@ export function LoginForm() {
               <button
                 type="button"
                 onClick={() => setStep("EMAIL")}
-                className="text-[11px] text-slate-400 hover:text-white"
+                className="text-[11px] text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
               >
                 Change email
               </button>
             </div>
             <div className="relative">
-              <KeyRound className="absolute left-3.5 top-3 h-4 w-4 text-slate-500" />
+              <KeyRound className="absolute left-3.5 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
               <input
                 type="text"
                 required
@@ -141,7 +141,7 @@ export function LoginForm() {
               />
             </div>
             {isDemo && (
-              <p className="mt-2 rounded-lg bg-slate-950 p-2 text-[11px] text-emerald-400 font-mono">
+              <p className="mt-2 rounded-lg bg-slate-100 dark:bg-slate-950 p-2 text-[11px] text-emerald-700 dark:text-emerald-400 font-mono">
                 💡 Demo Mode active: Type <span className="underline">123456</span> or any 6 digits to sign in.
               </p>
             )}

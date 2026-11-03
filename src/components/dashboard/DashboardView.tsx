@@ -228,32 +228,32 @@ export function DashboardView({
       )}
 
       {/* Tenant Selector & Actions Bar */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 p-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
             <IndianRupee className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <select
-                className="bg-transparent font-bold text-white focus:outline-none cursor-pointer"
+                className="bg-transparent font-bold text-slate-900 dark:text-white focus:outline-none cursor-pointer"
                 value={tenantId}
                 onChange={(e) => switchTenant(e.target.value)}
               >
                 {tenants.map((t) => (
-                  <option key={t.id} value={t.id} className="bg-slate-900 text-white">
+                  <option key={t.id} value={t.id} className="bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
                     {t.brand_display_name} ({t.type === "INTEGRATION_PARTNER" ? "Partner" : "Direct"})
                   </option>
                 ))}
               </select>
             </div>
-            <div className="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
-              <span>UPI VPA: {activeTenant?.upi_vpa ? <span className="font-mono text-emerald-400">{activeTenant.upi_vpa}</span> : <span className="text-amber-400 italic">Not set</span>}</span>
+            <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-0.5">
+              <span>UPI VPA: {activeTenant?.upi_vpa ? <span className="font-mono text-emerald-600 dark:text-emerald-400 font-medium">{activeTenant.upi_vpa}</span> : <span className="text-amber-500 dark:text-amber-400 italic">Not set</span>}</span>
               <span>•</span>
               <span>{activeTenant?.gstin ? `GSTIN: ${activeTenant.gstin}` : "GST Exempt"}</span>
               <button
                 onClick={() => setShowSetupModal(true)}
-                className="ml-1 inline-flex items-center gap-1 rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300 hover:text-white hover:bg-slate-700 transition"
+                className="ml-1 inline-flex items-center gap-1 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-700 hover:text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 transition"
               >
                 <Settings className="h-3 w-3" /> Edit Settings
               </button>
@@ -274,7 +274,7 @@ export function DashboardView({
             onClick={() => setShowCsvModal(true)}
             className="btn-secondary text-xs"
           >
-            <FileSpreadsheet className="h-4 w-4 text-emerald-400" /> Upload CSV
+            <FileSpreadsheet className="h-4 w-4 text-emerald-500 dark:text-emerald-400" /> Upload CSV
           </button>
           <button
             onClick={triggerDailyCron}
@@ -282,12 +282,12 @@ export function DashboardView({
             className="btn-secondary text-xs"
             title="Simulate 10:30 AM IST QStash Cron"
           >
-            <Play className={`h-4 w-4 text-sky-400 ${runningCron ? "animate-spin" : ""}`} />
+            <Play className={`h-4 w-4 text-sky-500 dark:text-sky-400 ${runningCron ? "animate-spin" : ""}`} />
             Run 10:30 AM Cron
           </button>
           <button
             onClick={resetDemoData}
-            className="btn-secondary text-xs text-slate-400 hover:text-white"
+            className="btn-secondary text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
             title="Reset store to seeded Indian demo data"
           >
             <RotateCcw className="h-4 w-4" /> Reset Demo
@@ -297,25 +297,25 @@ export function DashboardView({
 
       {/* Metrics Row */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Pending A/R</div>
-          <div className="mt-2 text-2xl font-extrabold text-white">₹{formatINR(metrics.pendingAmt)}</div>
+        <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 p-5 shadow-sm">
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Total Pending A/R</div>
+          <div className="mt-2 text-2xl font-extrabold text-slate-900 dark:text-white">₹{formatINR(metrics.pendingAmt)}</div>
           <div className="mt-1 text-xs text-slate-500">Active collectible receivables</div>
         </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="text-xs font-semibold uppercase tracking-wider text-rose-400">Critical At-Risk (&gt;7 Days)</div>
-          <div className="mt-2 text-2xl font-extrabold text-rose-400">₹{formatINR(metrics.atRiskAmt)}</div>
+        <div className="rounded-2xl border border-rose-200 bg-rose-50/50 dark:border-slate-800 dark:bg-slate-900/60 p-5 shadow-sm">
+          <div className="text-xs font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400">Critical At-Risk (&gt;7 Days)</div>
+          <div className="mt-2 text-2xl font-extrabold text-rose-600 dark:text-rose-400">₹{formatINR(metrics.atRiskAmt)}</div>
           <div className="mt-1 text-xs text-slate-500">Overdue milestone capital</div>
         </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Recovered (Paid)</div>
-          <div className="mt-2 text-2xl font-extrabold text-emerald-400">₹{formatINR(metrics.recoveredAmt)}</div>
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 dark:border-slate-800 dark:bg-slate-900/60 p-5 shadow-sm">
+          <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Recovered (Paid)</div>
+          <div className="mt-2 text-2xl font-extrabold text-emerald-700 dark:text-emerald-400">₹{formatINR(metrics.recoveredAmt)}</div>
           <div className="mt-1 text-xs text-slate-500">Collected via WhatsApp &amp; UPI</div>
         </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="text-xs font-semibold uppercase tracking-wider text-sky-400">Monthly Bill Quota</div>
-          <div className="mt-2 text-2xl font-extrabold text-white">
-            {invoices.length} <span className="text-sm font-normal text-slate-400">/ {activeTenant?.subscription_plan === "munshi_vyapar_pro" ? 350 : 100}</span>
+        <div className="rounded-2xl border border-sky-200 bg-sky-50/50 dark:border-slate-800 dark:bg-slate-900/60 p-5 shadow-sm">
+          <div className="text-xs font-semibold uppercase tracking-wider text-sky-700 dark:text-sky-400">Monthly Bill Quota</div>
+          <div className="mt-2 text-2xl font-extrabold text-slate-900 dark:text-white">
+            {invoices.length} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">/ {activeTenant?.subscription_plan === "munshi_vyapar_pro" ? 350 : 100}</span>
           </div>
           <div className="mt-1 text-xs text-slate-500">
             {activeTenant?.subscription_plan === "munshi_vyapar_pro" ? "Munshi Vyapar Pro" : "Munshi Standard"}
@@ -330,7 +330,7 @@ export function DashboardView({
           className={`rounded-xl px-4 py-2 text-xs font-bold transition ${
             activeBucket === "ALL"
               ? "bg-emerald-500 text-slate-950"
-              : "border border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700"
+              : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700"
           }`}
         >
           All Invoices ({invoices.length})
@@ -344,8 +344,8 @@ export function DashboardView({
               onClick={() => setActiveBucket(b)}
               className={`rounded-xl px-4 py-2 text-xs font-bold transition ${
                 isSelected
-                  ? "bg-slate-100 text-slate-950"
-                  : "border border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700"
+                  ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-950"
+                  : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700"
               }`}
             >
               {BUCKET_LABELS[b]} ({count})
@@ -355,12 +355,12 @@ export function DashboardView({
       </div>
 
       {/* Search & Invoices Table */}
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
-        <div className="flex items-center gap-2 border-b border-slate-800 px-4 py-3">
-          <Search className="h-4 w-4 text-slate-500" />
+      <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 overflow-hidden shadow-sm">
+        <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 px-4 py-3">
+          <Search className="h-4 w-4 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
-            className="w-full bg-transparent text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none"
+            className="w-full bg-transparent text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-200 dark:placeholder:text-slate-600"
             placeholder="Search invoice number, client or phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -369,7 +369,7 @@ export function DashboardView({
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-950/80 text-slate-400">
+            <thead className="bg-slate-50 text-slate-600 dark:bg-slate-950/80 dark:text-slate-400">
               <tr>
                 <th className="px-4 py-3 font-semibold">Client &amp; Contact</th>
                 <th className="px-4 py-3 font-semibold">Invoice #</th>
@@ -380,7 +380,7 @@ export function DashboardView({
                 <th className="px-4 py-3 font-semibold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 text-slate-300">
+            <tbody className="divide-y divide-slate-200 text-slate-700 dark:divide-slate-800/60 dark:text-slate-300">
               {filtered.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
@@ -397,27 +397,27 @@ export function DashboardView({
                   const clientPhone = inv.debtor?.phone || "No phone";
 
                   return (
-                    <tr key={inv.id} className="hover:bg-slate-800/30 transition">
+                    <tr key={inv.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
                       <td className="px-4 py-3">
-                        <div className="font-semibold text-white">{clientName}</div>
+                        <div className="font-semibold text-slate-900 dark:text-white">{clientName}</div>
                         <div className="text-[11px] text-slate-500">{clientPhone}</div>
                       </td>
-                      <td className="px-4 py-3 font-mono text-emerald-400">
+                      <td className="px-4 py-3 font-mono text-emerald-600 dark:text-emerald-400 font-medium">
                         {inv.invoice_number}
                         {inv.external_invoice_id && (
                           <div className="text-[10px] text-slate-500">ext: {inv.external_invoice_id}</div>
                         )}
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <div className="font-bold text-white">
+                        <div className="font-bold text-slate-900 dark:text-white">
                           ₹{formatINR(isPaid ? inv.amount_total_inr : inv.amount_pending_inr)}
                         </div>
                         {inv.status === "PARTIALLY_PAID" && (
-                          <div className="text-[10px] text-amber-400">partially paid</div>
+                          <div className="text-[10px] text-amber-600 dark:text-amber-400">partially paid</div>
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        <div>{formatDateIN(inv.due_date)}</div>
+                        <div className="font-medium text-slate-800 dark:text-slate-200">{formatDateIN(inv.due_date)}</div>
                         <div className="text-[10px] text-slate-500">
                           {overdueDays > 0
                             ? `${overdueDays}d overdue`
@@ -428,20 +428,20 @@ export function DashboardView({
                       </td>
                       <td className="px-4 py-3">
                         {isPaid ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
                             <CheckCircle2 className="h-3 w-3" /> PAID
                           </span>
                         ) : overdueDays > 7 ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-400">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-600 dark:text-rose-400">
                             <AlertCircle className="h-3 w-3" /> Overdue
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-sky-500/10 px-2 py-0.5 text-[10px] font-bold text-sky-400">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-sky-500/10 px-2 py-0.5 text-[10px] font-bold text-sky-600 dark:text-sky-400">
                             <Clock className="h-3 w-3" /> {inv.status}
                           </span>
                         )}
                         {nextDispatch && (
-                          <div className="mt-1 text-[10px] text-slate-400">
+                          <div className="mt-1 text-[10px] text-slate-500 dark:text-slate-400">
                             Next: {nextDispatch.tier?.replace("T_", "").toLowerCase()} on {nextDispatch.scheduled_for}
                           </div>
                         )}
@@ -450,13 +450,13 @@ export function DashboardView({
                         <button
                           onClick={() => toggleAutopilot(inv)}
                           disabled={isPaid}
-                          className="text-slate-400 hover:text-white disabled:opacity-30"
+                          className="text-slate-400 hover:text-slate-900 dark:hover:text-white disabled:opacity-30"
                           title="Toggle automated WhatsApp escalation"
                         >
                           {inv.autopilot_enabled ? (
-                            <ToggleRight className="h-6 w-6 text-emerald-400" />
+                            <ToggleRight className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />
                           ) : (
-                            <ToggleLeft className="h-6 w-6 text-slate-600" />
+                            <ToggleLeft className="h-6 w-6 text-slate-400 dark:text-slate-600" />
                           )}
                         </button>
                       </td>
@@ -464,7 +464,7 @@ export function DashboardView({
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => setSelectedInvoice(inv)}
-                            className="rounded p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white"
+                            className="rounded p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
                             title="Preview WhatsApp Template &amp; UPI Link"
                           >
                             <Eye className="h-4 w-4" />
@@ -474,14 +474,14 @@ export function DashboardView({
                               <button
                                 onClick={() => handleSendNow(inv)}
                                 disabled={sendingNowId === inv.id}
-                                className="rounded p-1.5 text-emerald-400 hover:bg-slate-800 hover:text-emerald-300"
+                                className="rounded p-1.5 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-emerald-400 dark:hover:bg-slate-800 dark:hover:text-emerald-300"
                                 title="Send WhatsApp Escalation Immediately"
                               >
                                 <Send className={`h-4 w-4 ${sendingNowId === inv.id ? "animate-pulse" : ""}`} />
                               </button>
                               <button
                                 onClick={() => setSettlingInvoice(inv)}
-                                className="rounded bg-emerald-500/10 px-2 py-1 text-[11px] font-bold text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 transition"
+                                className="rounded bg-emerald-500/10 px-2 py-1 text-[11px] font-bold text-emerald-600 hover:bg-emerald-500 hover:text-white dark:text-emerald-400 dark:hover:bg-emerald-500 dark:hover:text-slate-950 transition"
                               >
                                 Mark Paid
                               </button>
@@ -499,10 +499,10 @@ export function DashboardView({
       </div>
 
       {/* Recent Dispatches Feed */}
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+      <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60 p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
-          <div className="text-sm font-bold text-white flex items-center gap-2">
-            <MessageSquare className="h-4 w-4 text-emerald-400" /> WhatsApp Escalation Audit Log
+          <div className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <MessageSquare className="h-4 w-4 text-emerald-500 dark:text-emerald-400" /> WhatsApp Escalation Audit Log
           </div>
           <span className="text-xs text-slate-500">Last 25 dispatched events</span>
         </div>
@@ -513,24 +513,24 @@ export function DashboardView({
             (dispatches || []).map((d) => (
               <div
                 key={d.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-xl border border-slate-800/80 bg-slate-950/40 px-3 py-2 text-xs"
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs dark:border-slate-800/80 dark:bg-slate-950/40"
               >
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-emerald-400">{d.invoice_number || "—"}</span>
-                  <span className="text-slate-300">{d.client_name || "—"}</span>
-                  <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-400">
+                  <span className="font-mono text-emerald-600 dark:text-emerald-400 font-medium">{d.invoice_number || "—"}</span>
+                  <span className="text-slate-800 dark:text-slate-300">{d.client_name || "—"}</span>
+                  <span className="rounded bg-slate-200 text-slate-700 px-1.5 py-0.5 text-[10px] dark:bg-slate-800 dark:text-slate-400">
                     {d.tier}
                   </span>
                 </div>
-                <div className="flex items-center gap-3 text-slate-400 text-[11px]">
+                <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400 text-[11px]">
                   <span>{d.dispatched_at ? new Date(d.dispatched_at).toLocaleTimeString("en-IN") : d.scheduled_for}</span>
                   <span
                     className={`font-semibold ${
                       d.delivery_status === "READ"
-                        ? "text-emerald-400"
+                        ? "text-emerald-600 dark:text-emerald-400"
                         : d.delivery_status === "FAILED"
-                        ? "text-rose-400"
-                        : "text-sky-400"
+                        ? "text-rose-600 dark:text-rose-400"
+                        : "text-sky-600 dark:text-sky-400"
                     }`}
                   >
                     {d.delivery_status}
