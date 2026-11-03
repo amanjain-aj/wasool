@@ -5,6 +5,7 @@ import { CheckCircle2, ShieldCheck, Smartphone } from "lucide-react";
 import { getStore } from "@/lib/store";
 import { formatDateIN, formatINR } from "@/lib/dates";
 import { UpiQr } from "@/components/UpiQr";
+import { BuyerRazorpayPay } from "./BuyerRazorpayPay";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +47,21 @@ export default async function PayPage({ params }: { params: Promise<{ id: string
               <Smartphone className="h-5 w-5" /> Pay with any UPI app
             </a>
             <p className="mt-2 text-xs text-slate-500">GPay • PhonePe • Paytm • BHIM — amount pre-filled</p>
+
+            <div className="my-4 flex items-center gap-3">
+              <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+              <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Or</span>
+              <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+            </div>
+
+            <BuyerRazorpayPay
+              invoiceId={inv.id}
+              amountInINR={inv.amount_pending_inr}
+              debtorName={inv.debtor?.client_name}
+              debtorPhone={inv.debtor?.phone}
+              invoiceNumber={inv.invoice_number}
+              brandName={inv.tenant.brand_display_name}
+            />
             {inv.payment_link_url && (
               <div className="mt-6 flex flex-col items-center gap-2">
                 <div className="rounded-xl bg-white p-2 border border-slate-200 dark:border-transparent shadow-sm">

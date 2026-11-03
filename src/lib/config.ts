@@ -15,6 +15,8 @@ export const env = {
   qstashNextKey: () => process.env.QSTASH_NEXT_SIGNING_KEY || "",
   cronSecret: () => process.env.CRON_SECRET || "",
   razorpayWebhookSecret: () => process.env.RAZORPAY_WEBHOOK_SECRET || "",
+  razorpayKeyId: () => process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
+  razorpayKeySecret: () => process.env.RAZORPAY_KEY_SECRET || "",
 };
 
 export const isSupabaseConfigured = () => Boolean(env.supabaseUrl() && env.supabaseServiceKey());
