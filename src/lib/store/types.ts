@@ -98,4 +98,13 @@ export interface WasoolStore {
   clearSessionContext(senderPhone: string): Promise<void>;
   approveBatch(batchImportId: string): Promise<number>;
   findDebtorByNameFuzzy(tenantId: string, name: string): Promise<Debtor | null>;
+
+  // Super-Admin & Staff Management
+  listAllReconciliations(status?: string): Promise<any[]>;
+  overrideReconciliation(id: string, status: "CONFIRMED" | "REJECTED", notes?: string): Promise<void>;
+  listAdminAuditLogs(limit?: number): Promise<any[]>;
+  logAdminAction(adminEmail: string, actionType: string, targetTenantId?: string | null, metadata?: any): Promise<void>;
+  listStaff(tenantId: string): Promise<any[]>;
+  createStaff(tenantId: string, input: { staff_name: string; staff_phone: string; require_owner_approval?: boolean }): Promise<any>;
+  deleteStaff(id: string): Promise<void>;
 }

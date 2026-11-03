@@ -15,6 +15,8 @@ export interface LocalDb {
   reminder_dispatches: ReminderDispatch[];
   tenant_staff?: any[];
   payment_reconciliations?: any[];
+  admin_audit_logs?: any[];
+  whatsapp_session_context?: any[];
 }
 
 export const LOCAL_DB_VERSION = 1;
@@ -39,6 +41,9 @@ export function buildSeed(today: string = todayIST()): LocalDb {
     upi_vpa: "pixelpine@icici",
     whatsapp_phone_number_id: null,
     plan_tier: "growth",
+    is_registered: true,
+    registration_step: "COMPLETED",
+    subscription_plan: "munshi_vyapar_pro",
     is_active: true,
     created_at: now,
   };
@@ -56,6 +61,9 @@ export function buildSeed(today: string = todayIST()): LocalDb {
     upi_vpa: "sharmatraders@hdfcbank",
     whatsapp_phone_number_id: null,
     plan_tier: "partner_embedded",
+    is_registered: true,
+    registration_step: "COMPLETED",
+    subscription_plan: "munshi_standard",
     is_active: true,
     created_at: now,
   };

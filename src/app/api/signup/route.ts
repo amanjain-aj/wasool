@@ -40,6 +40,8 @@ export async function POST(req: NextRequest) {
     const existing = (await store.listTenants()).find((t) => t.owner_email.toLowerCase() === email);
     if (existing) throw new HttpError(409, "An account with this email already exists. Please log in.");
 
+    const hasUpi = Boolean(b.upi_vpa && b.upi_vpa.trim());
+
     const tenant = await store.upsertTenant({
       type: "DIRECT_BUSINESS",
       business_name: b.business_name.trim(),
@@ -47,15 +49,18 @@ export async function POST(req: NextRequest) {
       owner_email: email,
       owner_phone: phone!,
       gstin: b.gstin && b.gstin.trim() ? b.gstin.trim().toUpperCase() : null,
-      upi_vpa: b.upi_vpa && b.upi_vpa.trim() ? b.upi_vpa.trim() : "",
+      upi_vpa: hasUpi ? b.upi_vpa!.trim() : "",
       plan_tier: plan,
+      is_registered: hasUpi,
+      registration_step: hasUpi ? "COMPLETED" : "PENDING_UPI",
+      subscription_plan: "FREE_TRIAL",
     });
 
     return NextResponse.json({ 
       ok: true, 
       tenant_id: tenant.id, 
       plan_tier: tenant.plan_tier,
-      needs_setup: !tenant.upi_vpa
+      needs_setup: !hasUpi
     }, { status: 201 });
   } catch (err) {
     return errorResponse(err);

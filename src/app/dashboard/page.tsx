@@ -64,9 +64,18 @@ export default async function DashboardPage({
               Wasool<span className="text-emerald-500">.io</span>
             </Link>
             <div className="hidden sm:flex items-center gap-4 text-xs font-medium text-slate-400">
-              <span className="text-emerald-400 font-semibold">B2B Dashboard</span>
-              <Link href="/partner-docs" className="hover:text-white transition">
-                Partner API
+              <span className="text-emerald-400 font-semibold">Overview</span>
+              <Link href={selectedTenant ? `/dashboard/bills?tenant=${selectedTenant.id}` : "/dashboard/bills"} className="hover:text-white transition">
+                Bills Ledger
+              </Link>
+              <Link href={selectedTenant ? `/dashboard/staff?tenant=${selectedTenant.id}` : "/dashboard/staff"} className="hover:text-white transition">
+                Staff Numbers
+              </Link>
+              <Link href={selectedTenant ? `/dashboard/settings?tenant=${selectedTenant.id}` : "/dashboard/settings"} className="hover:text-white transition">
+                Settings &amp; Bank
+              </Link>
+              <Link href="/admin" className="text-rose-400 hover:text-rose-300 font-semibold transition">
+                Admin Panel
               </Link>
             </div>
           </div>

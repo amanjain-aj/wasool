@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export function middleware(req: NextRequest) {
   const basicPassword = process.env.DASHBOARD_PASSWORD;
+  const isAdminRoute = req.nextUrl.pathname.startsWith("/admin") || req.nextUrl.pathname.startsWith("/api/admin");
 
   // 1. If DASHBOARD_PASSWORD is configured, allow API / programmatic Basic Auth
   if (basicPassword) {
@@ -38,8 +39,8 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // 4. For page navigation (/dashboard), redirect cleanly to /login instead of browser popup
-  if (req.nextUrl.pathname.startsWith("/dashboard")) {
+  // 4. For page navigation (/dashboard, /admin), redirect cleanly to /login instead of browser popup
+  if (req.nextUrl.pathname.startsWith("/dashboard") || req.nextUrl.pathname.startsWith("/admin")) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -48,6 +49,16 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/api/invoices/:path*", "/api/invoices", "/api/tenants/:path*", "/api/tenants"],
+  matcher: [
+    "/dashboard/:path*",
+    "/admin/:path*",
+    "/api/admin/:path*",
+    "/api/invoices/:path*",
+    "/api/invoices",
+    "/api/tenants/:path*",
+    "/api/tenants",
+    "/api/staff/:path*",
+    "/api/staff"
+  ],
 };
 

@@ -201,6 +201,15 @@ export async function POST(req: NextRequest) {
             const activeTenant = tenantOwner || staffLookup?.tenant;
 
             if (activeTenant) {
+              // Registration Gating: strictly block dispatches & ingestion until registration is complete
+              if (activeTenant.is_registered === false) {
+                const appUrl = env.appUrl();
+                await sendWhatsAppReply(
+                  senderPhone,
+                  `⚠️ *Wasool Munshi Setup Incomplete*\n\nPlease complete your business registration and UPI VPA at ${appUrl}/dashboard/settings?tenant=${activeTenant.id} to activate WhatsApp bill forwarding and automatic payment follow-ups.`
+                );
+                continue;
+              }
               // Sub-case A: Native WhatsApp Contact Card (`vCard`) shared
               if (msg.type === "contacts") {
                 const contacts = extractContactsFromWebhook(msg.contacts);

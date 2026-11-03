@@ -40,6 +40,9 @@ export interface Tenant {
   upi_vpa: string | null;
   whatsapp_phone_number_id: string | null;
   plan_tier: PlanTier | string;
+  is_registered?: boolean;
+  registration_step?: "PENDING_PHONE" | "PENDING_BUSINESS_NAME" | "PENDING_UPI" | "COMPLETED" | string;
+  subscription_plan?: "FREE_TRIAL" | "munshi_standard" | "munshi_vyapar_pro" | string;
   bank_account_details?: string | null;
   preferred_language?: string | null;
   morning_digest_enabled?: boolean;
@@ -121,6 +124,15 @@ export interface PaymentReconciliation {
   created_at: string;
 }
 
+export interface AdminAuditLog {
+  id: string;
+  admin_email: string;
+  action_type: string;
+  target_tenant_id: string | null;
+  metadata?: Record<string, unknown> | null;
+  created_at: string;
+}
+
 export interface ReminderDispatch {
   id: string;
   invoice_id: string;
@@ -141,8 +153,38 @@ export interface InvoiceWithRelations extends Invoice {
 
 // ---- Upsert inputs -------------------------------------------------------
 
-export type TenantInput = Omit<Tenant, "id" | "created_at" | "type" | "plan_tier" | "is_active" | "partner_id" | "partner_merchant_id" | "gstin" | "upi_vpa" | "whatsapp_phone_number_id"> &
-  Partial<Pick<Tenant, "type" | "plan_tier" | "is_active" | "partner_id" | "partner_merchant_id" | "gstin" | "upi_vpa" | "whatsapp_phone_number_id">>;
+export type TenantInput = Omit<
+  Tenant,
+  | "id"
+  | "created_at"
+  | "type"
+  | "plan_tier"
+  | "is_active"
+  | "partner_id"
+  | "partner_merchant_id"
+  | "gstin"
+  | "upi_vpa"
+  | "whatsapp_phone_number_id"
+  | "is_registered"
+  | "registration_step"
+  | "subscription_plan"
+> &
+  Partial<
+    Pick<
+      Tenant,
+      | "type"
+      | "plan_tier"
+      | "is_active"
+      | "partner_id"
+      | "partner_merchant_id"
+      | "gstin"
+      | "upi_vpa"
+      | "whatsapp_phone_number_id"
+      | "is_registered"
+      | "registration_step"
+      | "subscription_plan"
+    >
+  >;
 
 export interface DebtorInput {
   tenant_id: string;

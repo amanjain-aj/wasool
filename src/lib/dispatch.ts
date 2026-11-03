@@ -53,7 +53,10 @@ export async function runDailyDispatch(runDate: string = todayIST()): Promise<Di
     const inv = await store.getInvoice(invoiceId);
     const now = new Date().toISOString();
 
-    if (!inv || !isCollectible(inv) || !inv.autopilot_enabled || !inv.tenant?.is_active) {
+    // Strict Post-Registration Gating: do not dispatch if tenant registration is incomplete
+    const isRegistered = inv?.tenant?.is_registered !== false && (inv?.tenant?.is_registered === true || inv?.tenant?.is_active === true);
+
+    if (!inv || !isCollectible(inv) || !inv.autopilot_enabled || !inv.tenant?.is_active || !isRegistered) {
       for (const r of rows) await store.updateDispatch(r.id, { delivery_status: "SKIPPED", dispatched_at: now });
       summary.skipped += rows.length;
       if (inv) {
@@ -116,6 +119,9 @@ export async function sendReminderNow(invoiceId: string) {
   const inv = await store.getInvoice(invoiceId);
   if (!inv) throw new HttpError(404, "Invoice not found");
   if (!isCollectible(inv)) throw new HttpError(409, `Invoice is ${inv.status}; reminders are halted`);
+  if (inv.tenant?.is_registered === false) {
+    throw new HttpError(403, "Tenant registration is incomplete. Please configure UPI VPA in Settings before triggering live reminders.");
+  }
 
   const today = todayIST();
   const stage = stageForToday(inv.due_date, today);

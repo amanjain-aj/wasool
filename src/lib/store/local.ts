@@ -402,6 +402,91 @@ export function createLocalStore(): WasoolStore {
         (x) => x.tenant_id === tenantId && (x.client_name.toLowerCase().includes(cleanName) || cleanName.includes(x.client_name.toLowerCase()))
       );
       return clone(d ?? null);
+    },
+
+    async listAllReconciliations(status?: string) {
+      const db = load();
+      if (!db.payment_reconciliations) return [];
+      let list = db.payment_reconciliations;
+      if (status) list = list.filter((r: any) => r.status === status);
+      return clone(
+        list.map((r: any) => {
+          const inv = db.invoices.find((i) => i.id === r.invoice_id);
+          const tenant = inv ? db.tenants.find((t) => t.id === inv.tenant_id) : null;
+          const debtor = inv ? db.debtors.find((d) => d.id === inv.debtor_id) : null;
+          return {
+            ...r,
+            invoice: inv ? { invoice_number: inv.invoice_number, amount_pending_inr: inv.amount_pending_inr } : null,
+            tenant: tenant ? { business_name: tenant.business_name, owner_phone: tenant.owner_phone } : null,
+            debtor: debtor ? { client_name: debtor.client_name, phone: debtor.phone } : null,
+          };
+        })
+      );
+    },
+
+    async overrideReconciliation(id: string, status: "CONFIRMED" | "REJECTED", notes?: string) {
+      const db = load();
+      if (!db.payment_reconciliations) return;
+      const rec = db.payment_reconciliations.find((r: any) => r.id === id);
+      if (rec) {
+        rec.status = status;
+        if (status === "CONFIRMED") rec.confirmed_at = new Date().toISOString();
+        if (notes) rec.admin_notes = notes;
+        persist();
+      }
+    },
+
+    async listAdminAuditLogs(limit = 50) {
+      const db = load();
+      if (!db.admin_audit_logs) return [];
+      return clone(
+        [...db.admin_audit_logs]
+          .sort((a: any, b: any) => b.created_at.localeCompare(a.created_at))
+          .slice(0, limit)
+      );
+    },
+
+    async logAdminAction(adminEmail: string, actionType: string, targetTenantId?: string | null, metadata?: any) {
+      const db = load();
+      if (!db.admin_audit_logs) db.admin_audit_logs = [];
+      db.admin_audit_logs.push({
+        id: randomUUID(),
+        admin_email: adminEmail,
+        action_type: actionType,
+        target_tenant_id: targetTenantId ?? null,
+        metadata: metadata ?? null,
+        created_at: new Date().toISOString(),
+      });
+      persist();
+    },
+
+    async listStaff(tenantId: string) {
+      const db = load();
+      if (!db.tenant_staff) return [];
+      return clone(db.tenant_staff.filter((s: any) => s.tenant_id === tenantId));
+    },
+
+    async createStaff(tenantId: string, input: { staff_name: string; staff_phone: string; require_owner_approval?: boolean }) {
+      const db = load();
+      if (!db.tenant_staff) db.tenant_staff = [];
+      const staff = {
+        id: randomUUID(),
+        tenant_id: tenantId,
+        staff_name: input.staff_name,
+        staff_phone: input.staff_phone,
+        require_owner_approval: input.require_owner_approval ?? true,
+        created_at: new Date().toISOString(),
+      };
+      db.tenant_staff.push(staff);
+      persist();
+      return clone(staff);
+    },
+
+    async deleteStaff(id: string) {
+      const db = load();
+      if (!db.tenant_staff) return;
+      db.tenant_staff = db.tenant_staff.filter((s: any) => s.id !== id);
+      persist();
     }
   };
 }

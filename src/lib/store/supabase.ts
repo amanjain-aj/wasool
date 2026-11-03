@@ -259,6 +259,69 @@ export function createSupabaseStore(url: string, serviceRoleKey: string): Wasool
         .limit(1)
         .maybeSingle();
       return data || null;
+    },
+
+    async listAllReconciliations(status?: string) {
+      let q = db
+        .from("payment_reconciliations")
+        .select("*, invoice:invoices(invoice_number, amount_pending_inr, tenant:tenants(business_name, owner_phone), debtor:debtors(client_name, phone))")
+        .order("created_at", { ascending: false });
+      if (status) q = q.eq("status", status);
+      const { data } = await q;
+      return data || [];
+    },
+
+    async overrideReconciliation(id: string, status: "CONFIRMED" | "REJECTED", notes?: string) {
+      const patch: any = { status };
+      if (status === "CONFIRMED") patch.confirmed_at = new Date().toISOString();
+      if (notes) patch.admin_notes = notes;
+      await db.from("payment_reconciliations").update(patch).eq("id", id);
+    },
+
+    async listAdminAuditLogs(limit = 50) {
+      const { data } = await db
+        .from("admin_audit_logs")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(limit);
+      return data || [];
+    },
+
+    async logAdminAction(adminEmail: string, actionType: string, targetTenantId?: string | null, metadata?: any) {
+      await db.from("admin_audit_logs").insert({
+        admin_email: adminEmail,
+        action_type: actionType,
+        target_tenant_id: targetTenantId ?? null,
+        metadata: metadata ?? null
+      });
+    },
+
+    async listStaff(tenantId: string) {
+      const { data } = await db
+        .from("tenant_staff")
+        .select("*")
+        .eq("tenant_id", tenantId)
+        .order("created_at", { ascending: false });
+      return data || [];
+    },
+
+    async createStaff(tenantId: string, input: { staff_name: string; staff_phone: string; require_owner_approval?: boolean }) {
+      const { data, error } = await db
+        .from("tenant_staff")
+        .insert({
+          tenant_id: tenantId,
+          staff_name: input.staff_name,
+          staff_phone: input.staff_phone,
+          require_owner_approval: input.require_owner_approval ?? true
+        })
+        .select()
+        .single();
+      if (error) throw new Error(error.message);
+      return data;
+    },
+
+    async deleteStaff(id: string) {
+      await db.from("tenant_staff").delete().eq("id", id);
     }
   };
 }
