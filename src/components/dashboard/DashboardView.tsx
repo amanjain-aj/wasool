@@ -296,21 +296,30 @@ export function DashboardView({
       </div>
 
       {/* Metrics Row */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
           <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Pending A/R</div>
-          <div className="mt-2 text-3xl font-extrabold text-white">₹{formatINR(metrics.pendingAmt)}</div>
+          <div className="mt-2 text-2xl font-extrabold text-white">₹{formatINR(metrics.pendingAmt)}</div>
           <div className="mt-1 text-xs text-slate-500">Active collectible receivables</div>
         </div>
         <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
           <div className="text-xs font-semibold uppercase tracking-wider text-rose-400">Critical At-Risk (&gt;7 Days)</div>
-          <div className="mt-2 text-3xl font-extrabold text-rose-400">₹{formatINR(metrics.atRiskAmt)}</div>
+          <div className="mt-2 text-2xl font-extrabold text-rose-400">₹{formatINR(metrics.atRiskAmt)}</div>
           <div className="mt-1 text-xs text-slate-500">Overdue milestone capital</div>
         </div>
         <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
           <div className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Recovered (Paid)</div>
-          <div className="mt-2 text-3xl font-extrabold text-emerald-400">₹{formatINR(metrics.recoveredAmt)}</div>
+          <div className="mt-2 text-2xl font-extrabold text-emerald-400">₹{formatINR(metrics.recoveredAmt)}</div>
           <div className="mt-1 text-xs text-slate-500">Collected via WhatsApp &amp; UPI</div>
+        </div>
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+          <div className="text-xs font-semibold uppercase tracking-wider text-sky-400">Monthly Bill Quota</div>
+          <div className="mt-2 text-2xl font-extrabold text-white">
+            {invoices.length} <span className="text-sm font-normal text-slate-400">/ {activeTenant?.subscription_plan === "munshi_vyapar_pro" ? 350 : 100}</span>
+          </div>
+          <div className="mt-1 text-xs text-slate-500">
+            {activeTenant?.subscription_plan === "munshi_vyapar_pro" ? "Munshi Vyapar Pro" : "Munshi Standard"}
+          </div>
         </div>
       </div>
 

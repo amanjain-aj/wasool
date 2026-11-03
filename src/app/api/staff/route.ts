@@ -35,6 +35,12 @@ export async function POST(req: NextRequest) {
       throw new HttpError(422, "Please enter a valid 10-digit Indian phone number");
     }
 
+    const { checkCanAddStaff } = await import("@/lib/quota");
+    const quotaCheck = await checkCanAddStaff(tenant_id);
+    if (!quotaCheck.allowed) {
+      throw new HttpError(403, quotaCheck.reason || "Staff account limit reached under your current plan.");
+    }
+
     const store = getStore();
     const staff = await store.createStaff(tenant_id, {
       staff_name: staff_name.trim(),

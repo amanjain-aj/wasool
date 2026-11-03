@@ -30,6 +30,12 @@ export async function POST(req: NextRequest) {
     const tenant = await getStore().getTenant(body.tenant_id);
     if (!tenant) throw new HttpError(404, "Tenant not found");
 
+    const { checkCanIngestBills } = await import("@/lib/quota");
+    const quotaCheck = await checkCanIngestBills(body.tenant_id, body.rows.length);
+    if (!quotaCheck.allowed) {
+      throw new HttpError(403, quotaCheck.reason || "Monthly invoice quota exceeded");
+    }
+
     const imported: Array<{ row: number; invoice_number: string; invoice_id: string; reminders: number }> = [];
     const errors: Array<{ row: number; invoice_number?: string; error: string }> = [];
 

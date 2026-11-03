@@ -279,6 +279,18 @@ export async function POST(req: NextRequest) {
                 const extracted = await parseUnifiedMunshiInput(fileBuffer, mimeType, captionText, today, pairedContact);
                 const requireApproval = staffLookup ? staffLookup.staff.require_owner_approval : true;
 
+                // Quota Enforcement: Verify tenant has not exceeded their monthly bill allowance
+                const { checkCanIngestBills } = await import("@/lib/quota");
+                const quotaCheck = await checkCanIngestBills(activeTenant.id, extracted.entries.length || 1);
+                if (!quotaCheck.allowed) {
+                  const appUrl = env.appUrl();
+                  await sendWhatsAppReply(
+                    senderPhone,
+                    `⚠️ *Monthly Bill Quota Reached*\n\nAapke account ka monthly bill limit (${quotaCheck.usage.billsUsedThisMonth}/${quotaCheck.usage.billsLimit} bills) poora ho chuka hai.\n\nNaye bills add karne ke liye apna subscription plan upgrade karein:\n${appUrl}/dashboard/settings?tenant=${activeTenant.id}`
+                  );
+                  continue;
+                }
+
                 // Handle Bulk Ingestion (Khatabook PDF, Diary Page, or Multi-Party Voice Note)
                 if (extracted.is_bulk_list && extracted.entries.length > 1) {
                   const batchImportId = randomUUID();

@@ -110,18 +110,19 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
                 <th className="px-4 py-3 font-semibold">UPI VPA &amp; GSTIN</th>
                 <th className="px-4 py-3 font-semibold">Gating Status</th>
                 <th className="px-4 py-3 font-semibold">Subscription Plan</th>
+                <th className="px-4 py-3 font-semibold">Monthly Quota</th>
                 <th className="px-4 py-3 font-semibold text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 text-slate-300">
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
+                  <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
                     No businesses matching the selected filter.
                   </td>
                 </tr>
               ) : (
-                filtered.map((t) => {
+                filtered.map((t: any) => {
                   const isRegistered = t.is_registered === true || (t.is_registered !== false && t.is_active);
                   const isBusy = updatingId === t.id;
 
@@ -166,6 +167,30 @@ export function TenantsClient({ initialTenants }: { initialTenants: Tenant[] }) 
                           <option value="growth">Growth</option>
                           <option value="partner_embedded">Partner Embedded</option>
                         </select>
+                      </td>
+                      <td className="px-4 py-3">
+                        {t.usage ? (
+                          <div>
+                            <div className="flex items-center gap-1.5 font-bold text-white">
+                              <span>{t.usage.billsUsedThisMonth} / {t.usage.billsLimit}</span>
+                              <span className="text-[10px] text-slate-400 font-normal">({t.usage.usagePercentage}%)</span>
+                            </div>
+                            <div className="mt-1 w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                              <div
+                                className={`h-full rounded-full ${
+                                  t.usage.usagePercentage > 90
+                                    ? "bg-rose-500"
+                                    : t.usage.usagePercentage > 75
+                                    ? "bg-amber-500"
+                                    : "bg-emerald-500"
+                                }`}
+                                style={{ width: `${t.usage.usagePercentage}%` }}
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-slate-500 italic">No usage recorded</span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex items-center justify-end gap-2">
