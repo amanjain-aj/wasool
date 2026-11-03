@@ -8,15 +8,16 @@ export const dynamic = "force-dynamic";
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tenant?: string }>;
+  searchParams: Promise<{ tenant?: string; setup?: string }>;
 }) {
-  const { tenant: queryTenantId } = await searchParams;
+  const { tenant: queryTenantId, setup } = await searchParams;
   let tenants: any[] = [];
   let selectedTenant: any = null;
   let invoices: any[] = [];
   let recentDispatches: any[] = [];
   const today = todayIST();
   let loadError: string | null = null;
+  const initialShowSetup = setup === "1";
 
   try {
     const store = getStore();
@@ -107,6 +108,7 @@ export default async function DashboardPage({
             invoices={invoices}
             recentDispatches={recentDispatches}
             today={today}
+            initialShowSetup={initialShowSetup}
           />
         )}
       </main>

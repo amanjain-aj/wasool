@@ -56,7 +56,7 @@ export async function ingestInvoice(input: IngestInput): Promise<IngestResult> {
   });
 
   const amountPending = round2(input.invoice.amount_pending_inr);
-  const upiLink = buildUPILink(tenant.upi_vpa, tenant.brand_display_name, amountPending, input.invoice.invoice_number);
+  const upiLink = buildUPILink(tenant.upi_vpa || "", tenant.brand_display_name, amountPending, input.invoice.invoice_number);
 
   const invoice = await store.upsertInvoice({
     tenant_id: tenant.id,
@@ -118,7 +118,7 @@ export async function settleInvoice(
       status: "PARTIALLY_PAID",
       amount_pending_inr: remaining,
       utr_reference: utr ?? inv.utr_reference,
-      payment_link_url: buildUPILink(inv.tenant.upi_vpa, inv.tenant.brand_display_name, remaining, inv.invoice_number),
+      payment_link_url: buildUPILink(inv.tenant.upi_vpa || "", inv.tenant.brand_display_name, remaining, inv.invoice_number),
     });
     return { invoice: updated, status: "PARTIALLY_PAID", cancelled_reminders: 0 };
   }

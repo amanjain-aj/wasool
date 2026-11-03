@@ -130,7 +130,7 @@ export function buildSeed(today: string = todayIST()): LocalDb {
       issue_date: addDays(dueDate, -30),
       due_date: dueDate,
       status,
-      payment_link_url: buildUPILink(r.tenant.upi_vpa, r.tenant.brand_display_name, pending || r.total, r.inv),
+      payment_link_url: buildUPILink(r.tenant.upi_vpa || "", r.tenant.brand_display_name, pending || r.total, r.inv),
       utr_reference: r.utr ?? null,
       autopilot_enabled: r.autopilot ?? true,
       created_at: now,

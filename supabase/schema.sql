@@ -19,9 +19,12 @@ CREATE TABLE tenants (
     owner_phone VARCHAR(20) NOT NULL,
     owner_email VARCHAR(255) UNIQUE NOT NULL,
     gstin VARCHAR(15),
-    upi_vpa VARCHAR(100) NOT NULL, -- e.g., merchant@icici
+    upi_vpa VARCHAR(100) DEFAULT '', -- Optional at signup, configured during onboarding
     whatsapp_phone_number_id VARCHAR(100),
     plan_tier VARCHAR(50) DEFAULT 'starter', -- 'starter', 'growth', 'partner_embedded'
+    bank_account_details TEXT,
+    preferred_language VARCHAR(20) DEFAULT 'HINGLISH',
+    morning_digest_enabled BOOLEAN DEFAULT TRUE,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -117,6 +120,8 @@ CREATE POLICY tenant_owner_select ON tenants
     FOR SELECT USING (owner_email = auth.jwt() ->> 'email');
 CREATE POLICY tenant_owner_update ON tenants
     FOR UPDATE USING (owner_email = auth.jwt() ->> 'email');
+CREATE POLICY tenant_owner_insert ON tenants
+    FOR INSERT WITH CHECK (owner_email = auth.jwt() ->> 'email' OR auth.role() = 'service_role' OR auth.role() = 'anon');
 
 CREATE POLICY debtors_tenant_isolation ON debtors
     FOR ALL USING (

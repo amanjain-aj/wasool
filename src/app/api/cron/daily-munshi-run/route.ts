@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
           invoiceNumber: inv.invoice_number,
           pendingAmount: inv.amount_pending_inr,
           dueDateFormatted: formatDateIN(inv.due_date),
-          upiVpa: inv.tenant.upi_vpa,
+          upiVpa: inv.tenant.upi_vpa || "",
           neftDetails: inv.tenant.bank_account_details || undefined,
           mediaStorageUrl: inv.media_storage_url,
           mediaMimeType: inv.media_mime_type

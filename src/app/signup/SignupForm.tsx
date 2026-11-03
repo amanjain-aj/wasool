@@ -2,31 +2,30 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
-import { isValidGSTIN, isValidVPA, normalizeIndianPhone } from "@/lib/upi";
+import { ArrowRight, CheckCircle2, Loader2, Lock, ShieldCheck } from "lucide-react";
+import { normalizeIndianPhone } from "@/lib/upi";
+import Link from "next/link";
 
-export function SignupForm({ initialPlan }: { initialPlan: "starter" | "growth" }) {
+export function SignupForm({ initialPlan }: { initialPlan: string }) {
   const router = useRouter();
   const [form, setForm] = useState({
     business_name: "",
-    brand_display_name: "",
     owner_email: "",
     owner_phone: "",
-    gstin: "",
-    upi_vpa: "",
-    plan_tier: initialPlan,
+    plan_tier: initialPlan || "starter",
   });
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!normalizeIndianPhone(form.owner_phone)) return setError("Enter a valid Indian mobile number.");
-    if (!isValidVPA(form.upi_vpa)) return setError("Enter a valid UPI VPA, e.g. yourbusiness@icici.");
-    if (form.gstin && !isValidGSTIN(form.gstin)) return setError("GSTIN format looks invalid.");
+    if (!form.business_name.trim()) return setError("Please enter your business or firm name.");
+    if (!normalizeIndianPhone(form.owner_phone)) return setError("Please enter a valid 10-digit Indian mobile number.");
+    
     setBusy(true);
     try {
       const res = await fetch("/api/signup", {
@@ -36,7 +35,9 @@ export function SignupForm({ initialPlan }: { initialPlan: "starter" | "growth" 
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Signup failed");
-      router.push(`/dashboard?tenant=${json.tenant_id}&welcome=1`);
+      
+      // Route immediately into dashboard with setup prompt
+      router.push(`/dashboard?tenant=${json.tenant_id}&setup=1`);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
       setBusy(false);
@@ -44,46 +45,80 @@ export function SignupForm({ initialPlan }: { initialPlan: "starter" | "growth" 
   }
 
   return (
-    <form onSubmit={submit} className="mt-8 space-y-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-      <div>
-        <label className="label">Registered business name *</label>
-        <input className="input" required value={form.business_name} onChange={set("business_name")} placeholder="Pixel & Pine Digital LLP" />
-      </div>
-      <div>
-        <label className="label">Name shown on WhatsApp</label>
-        <input className="input" value={form.brand_display_name} onChange={set("brand_display_name")} placeholder="Pixel & Pine Digital" maxLength={100} />
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
+    <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 p-8 shadow-2xl backdrop-blur-md">
+      <form onSubmit={submit} className="space-y-5">
         <div>
-          <label className="label">Work email *</label>
-          <input className="input" type="email" required value={form.owner_email} onChange={set("owner_email")} placeholder="accounts@yourfirm.in" />
+          <label className="label">Business / Firm Name *</label>
+          <input
+            className="input"
+            required
+            value={form.business_name}
+            onChange={set("business_name")}
+            placeholder="e.g. Apex Engineering Works / Sharma Traders"
+            autoFocus
+          />
+          <p className="mt-1 text-[11px] text-slate-500">Your clients will see this name on bills and reminders.</p>
         </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className="label">Work Email *</label>
+            <input
+              className="input"
+              type="email"
+              required
+              value={form.owner_email}
+              onChange={set("owner_email")}
+              placeholder="accounts@yourfirm.in"
+            />
+          </div>
+          <div>
+            <label className="label">WhatsApp Number *</label>
+            <input
+              className="input"
+              required
+              value={form.owner_phone}
+              onChange={set("owner_phone")}
+              placeholder="98201 12233"
+            />
+          </div>
+        </div>
+
         <div>
-          <label className="label">Mobile (WhatsApp) *</label>
-          <input className="input" required value={form.owner_phone} onChange={set("owner_phone")} placeholder="98201 12233" />
+          <label className="label">Plan Tier</label>
+          <select className="input cursor-pointer" value={form.plan_tier} onChange={set("plan_tier")}>
+            <option value="munshi_standard">Munshi Standard — ₹999/mo (100 bills, Photo/Voice Tagada)</option>
+            <option value="munshi_vyapar_pro">Munshi Vyapar Pro — ₹2,499/mo (350 bills, Staff Delegation)</option>
+            <option value="starter">Direct Agency Starter — ₹1,499/mo</option>
+            <option value="growth">Direct Agency Growth — ₹3,999/mo</option>
+          </select>
         </div>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label className="label">UPI VPA for collections *</label>
-          <input className="input" required value={form.upi_vpa} onChange={set("upi_vpa")} placeholder="yourfirm@icici" />
+
+        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-xs text-slate-600 dark:text-slate-400">
+          <div className="flex items-center gap-1.5 font-semibold text-emerald-600 dark:text-emerald-400 mb-1">
+            <CheckCircle2 className="h-4 w-4" /> 14-Day Free Trial Activated
+          </div>
+          You can add your UPI ID, bank details, and staff delegation anytime from your settings after registration.
         </div>
-        <div>
-          <label className="label">GSTIN (optional)</label>
-          <input className="input uppercase" value={form.gstin} onChange={set("gstin")} placeholder="27AAQFP1234C1Z5" maxLength={15} />
+
+        {error && (
+          <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs text-rose-500 dark:text-rose-300">
+            {error}
+          </p>
+        )}
+
+        <button className="btn-primary w-full py-3.5 text-base" disabled={busy}>
+          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />} 
+          Start 14-Day Free Pilot
+        </button>
+
+        <div className="pt-2 text-center text-xs text-slate-500 dark:text-slate-400">
+          Already have an account?{" "}
+          <Link href="/login" className="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+            Sign In with Email OTP
+          </Link>
         </div>
-      </div>
-      <div>
-        <label className="label">Plan</label>
-        <select className="input" value={form.plan_tier} onChange={set("plan_tier")}>
-          <option value="starter">Starter — ₹1,499/mo (100 invoices)</option>
-          <option value="growth">Growth — ₹3,999/mo (400 invoices)</option>
-        </select>
-      </div>
-      {error && <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-300">{error}</p>}
-      <button className="btn-primary w-full py-3" disabled={busy}>
-        {busy && <Loader2 className="h-4 w-4 animate-spin" />} Start free pilot
-      </button>
-    </form>
+      </form>
+    </div>
   );
 }

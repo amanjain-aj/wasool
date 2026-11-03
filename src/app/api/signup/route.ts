@@ -10,7 +10,7 @@ interface SignupBody {
   owner_email: string;
   owner_phone: string;
   gstin?: string;
-  upi_vpa: string;
+  upi_vpa?: string;
   plan_tier?: string;
 }
 
@@ -18,19 +18,27 @@ export async function POST(req: NextRequest) {
   try {
     const b = await readJson<SignupBody>(req);
     const problems: string[] = [];
-    if (!b.business_name?.trim()) problems.push("Business name is required");
-    if (!b.owner_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(b.owner_email)) problems.push("Valid email is required");
+    if (!b.business_name?.trim()) problems.push("Business or Firm name is required");
+    if (!b.owner_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(b.owner_email)) problems.push("Valid work email is required");
+    
     const phone = normalizeIndianPhone(b.owner_phone);
-    if (!phone) problems.push("Valid Indian mobile number is required");
-    if (!b.upi_vpa || !isValidVPA(b.upi_vpa)) problems.push("Valid UPI VPA is required (e.g. yourbusiness@icici)");
-    if (b.gstin && !isValidGSTIN(b.gstin)) problems.push("GSTIN format looks invalid");
-    const plan = b.plan_tier === "growth" ? "growth" : "starter";
+    if (!phone) problems.push("Valid 10-digit Indian mobile number is required");
+    
+    // UPI and GSTIN are now completely optional at signup, asked post-registration!
+    if (b.upi_vpa && b.upi_vpa.trim() && !isValidVPA(b.upi_vpa)) {
+      problems.push("UPI VPA format looks invalid (e.g. yourname@icici)");
+    }
+    if (b.gstin && b.gstin.trim() && !isValidGSTIN(b.gstin)) {
+      problems.push("GSTIN format looks invalid (e.g. 27ABCDE1234F1Z5)");
+    }
+
+    const plan = b.plan_tier || "starter";
     if (problems.length) throw new HttpError(422, problems.join("; "));
 
     const store = getStore();
     const email = b.owner_email.trim().toLowerCase();
     const existing = (await store.listTenants()).find((t) => t.owner_email.toLowerCase() === email);
-    if (existing) throw new HttpError(409, "An account with this email already exists");
+    if (existing) throw new HttpError(409, "An account with this email already exists. Please log in.");
 
     const tenant = await store.upsertTenant({
       type: "DIRECT_BUSINESS",
@@ -38,11 +46,17 @@ export async function POST(req: NextRequest) {
       brand_display_name: (b.brand_display_name || b.business_name).trim().slice(0, 100),
       owner_email: email,
       owner_phone: phone!,
-      gstin: b.gstin ? b.gstin.trim().toUpperCase() : null,
-      upi_vpa: b.upi_vpa.trim(),
+      gstin: b.gstin && b.gstin.trim() ? b.gstin.trim().toUpperCase() : null,
+      upi_vpa: b.upi_vpa && b.upi_vpa.trim() ? b.upi_vpa.trim() : "",
       plan_tier: plan,
     });
-    return NextResponse.json({ tenant_id: tenant.id, plan_tier: tenant.plan_tier }, { status: 201 });
+
+    return NextResponse.json({ 
+      ok: true, 
+      tenant_id: tenant.id, 
+      plan_tier: tenant.plan_tier,
+      needs_setup: !tenant.upi_vpa
+    }, { status: 201 });
   } catch (err) {
     return errorResponse(err);
   }

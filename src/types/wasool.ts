@@ -30,7 +30,7 @@ export interface Tenant {
   owner_phone: string;
   owner_email: string;
   gstin: string | null;
-  upi_vpa: string;
+  upi_vpa: string | null;
   whatsapp_phone_number_id: string | null;
   plan_tier: PlanTier | string;
   bank_account_details?: string | null;
@@ -124,8 +124,8 @@ export interface InvoiceWithRelations extends Invoice {
 
 // ---- Upsert inputs -------------------------------------------------------
 
-export type TenantInput = Omit<Tenant, "id" | "created_at" | "type" | "plan_tier" | "is_active" | "partner_id" | "partner_merchant_id" | "gstin" | "whatsapp_phone_number_id"> &
-  Partial<Pick<Tenant, "type" | "plan_tier" | "is_active" | "partner_id" | "partner_merchant_id" | "gstin" | "whatsapp_phone_number_id">>;
+export type TenantInput = Omit<Tenant, "id" | "created_at" | "type" | "plan_tier" | "is_active" | "partner_id" | "partner_merchant_id" | "gstin" | "upi_vpa" | "whatsapp_phone_number_id"> &
+  Partial<Pick<Tenant, "type" | "plan_tier" | "is_active" | "partner_id" | "partner_merchant_id" | "gstin" | "upi_vpa" | "whatsapp_phone_number_id">>;
 
 export interface DebtorInput {
   tenant_id: string;

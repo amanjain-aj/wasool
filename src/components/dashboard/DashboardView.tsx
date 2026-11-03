@@ -26,6 +26,8 @@ import { Modal } from "./Modal";
 import { PreviewPanel } from "./PreviewPanel";
 import { SettleForm } from "./SettleForm";
 import { CsvImporter } from "./CsvImporter";
+import { OnboardingSetupModal } from "./OnboardingSetupModal";
+import { Settings, Sparkles } from "lucide-react";
 
 interface DashboardViewProps {
   tenants: Tenant[];
@@ -33,15 +35,18 @@ interface DashboardViewProps {
   invoices: InvoiceWithRelations[];
   recentDispatches: Array<ReminderDispatch & { invoice_number: string; client_name: string }>;
   today: string;
+  initialShowSetup?: boolean;
 }
 
 export function DashboardView({
-  tenants,
+  tenants: initialTenants,
   initialTenantId,
   invoices: initialInvoices,
   recentDispatches: initialDispatches,
   today,
+  initialShowSetup = false,
 }: DashboardViewProps) {
+  const [tenants, setTenants] = useState(initialTenants);
   const [tenantId, setTenantId] = useState(initialTenantId);
   const [invoices, setInvoices] = useState(initialInvoices);
   const [dispatches, setDispatches] = useState(initialDispatches);
@@ -50,6 +55,7 @@ export function DashboardView({
   const [selectedInvoice, setSelectedInvoice] = useState<InvoiceWithRelations | null>(null);
   const [settlingInvoice, setSettlingInvoice] = useState<InvoiceWithRelations | null>(null);
   const [showCsvModal, setShowCsvModal] = useState(false);
+  const [showSetupModal, setShowSetupModal] = useState(initialShowSetup);
   const [notification, setNotification] = useState<string | null>(null);
   const [runningCron, setRunningCron] = useState(false);
   const [sendingNowId, setSendingNowId] = useState<string | null>(null);
@@ -234,14 +240,29 @@ export function DashboardView({
                 ))}
               </select>
             </div>
-            <div className="text-xs text-slate-400">
-              UPI VPA: <span className="font-mono text-slate-300">{activeTenant?.upi_vpa}</span> •{" "}
-              {activeTenant?.gstin ? `GSTIN: ${activeTenant.gstin}` : "GST Exempt"}
+            <div className="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+              <span>UPI VPA: {activeTenant?.upi_vpa ? <span className="font-mono text-emerald-400">{activeTenant.upi_vpa}</span> : <span className="text-amber-400 italic">Not set</span>}</span>
+              <span>•</span>
+              <span>{activeTenant?.gstin ? `GSTIN: ${activeTenant.gstin}` : "GST Exempt"}</span>
+              <button
+                onClick={() => setShowSetupModal(true)}
+                className="ml-1 inline-flex items-center gap-1 rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300 hover:text-white hover:bg-slate-700 transition"
+              >
+                <Settings className="h-3 w-3" /> Edit Settings
+              </button>
             </div>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {!activeTenant?.upi_vpa && (
+            <button
+              onClick={() => setShowSetupModal(true)}
+              className="btn-primary text-xs bg-amber-500 hover:bg-amber-400 text-slate-950 animate-pulse"
+            >
+              <Sparkles className="h-4 w-4" /> Setup UPI &amp; Bank
+            </button>
+          )}
           <button
             onClick={() => setShowCsvModal(true)}
             className="btn-secondary text-xs"
@@ -541,6 +562,24 @@ export function DashboardView({
               setNotification("CSV invoices imported successfully!");
               refreshData();
             }}
+          />
+        </Modal>
+      )}
+
+      {showSetupModal && activeTenant && (
+        <Modal
+          title="Business Collection &amp; Bank Setup"
+          onClose={() => setShowSetupModal(false)}
+        >
+          <OnboardingSetupModal
+            tenant={activeTenant}
+            onComplete={(updated) => {
+              setTenants((prev) => prev.map((t) => (t.id === updated.id ? { ...t, ...updated } : t)));
+              setShowSetupModal(false);
+              setNotification("Collection settings updated successfully!");
+              refreshData();
+            }}
+            onDismiss={() => setShowSetupModal(false)}
           />
         </Modal>
       )}

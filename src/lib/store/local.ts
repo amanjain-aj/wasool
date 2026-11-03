@@ -87,6 +87,7 @@ export function createLocalStore(): WasoolStore {
         partner_id: null,
         partner_merchant_id: null,
         gstin: null,
+        upi_vpa: input.upi_vpa ?? "",
         whatsapp_phone_number_id: null,
         plan_tier: "starter",
         is_active: true,
