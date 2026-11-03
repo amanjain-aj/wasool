@@ -35,12 +35,12 @@ export function LiveMessagePreview() {
   return (
     <div className="grid gap-8 md:grid-cols-2">
       <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="sm:col-span-2">
             <label className="label">Your business name</label>
             <input className="input" value={brand} onChange={(e) => setBrand(e.target.value)} />
           </div>
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <label className="label">Your UPI VPA</label>
             <input className={`input ${vpaOk ? "" : "border-rose-500"}`} value={vpa} onChange={(e) => setVpa(e.target.value)} />
             {!vpaOk && <p className="mt-1 text-xs text-rose-400">Format: handle@bank (e.g. yourbiz@icici)</p>}
@@ -64,12 +64,12 @@ export function LiveMessagePreview() {
         </div>
         <div>
           <label className="label">Escalation stage</label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {ESCALATION_STAGES.map((s, i) => (
               <button
                 key={s.tier}
                 onClick={() => setTierIdx(i)}
-                className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                className={`rounded-full border px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-semibold transition ${
                   i === tierIdx
                     ? "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300"
                     : "border-slate-300 text-slate-600 hover:border-slate-400 dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-600"
@@ -80,21 +80,21 @@ export function LiveMessagePreview() {
             ))}
           </div>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950">
+        <div className="rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950 shadow-sm">
           <div className="label">Generated NPCI UPI intent</div>
-          <code className="block break-all text-xs font-mono text-emerald-600 dark:text-emerald-400">{upi}</code>
+          <code className="block break-all text-[11px] sm:text-xs font-mono text-emerald-600 dark:text-emerald-400">{upi}</code>
         </div>
       </div>
 
       <div className="space-y-4">
         <WhatsAppBubble sender={brand || "Your Business"} text={text} buttonHref={upi} />
-        <div className="flex items-center gap-4 rounded-xl border border-slate-200 bg-slate-100/70 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-          <div className="rounded-lg bg-white p-1.5 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-3 sm:gap-4 rounded-xl border border-slate-200 bg-slate-100/70 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+          <div className="shrink-0 rounded-lg bg-white p-2 shadow-sm">
             <UpiQr value={upi} size={112} />
           </div>
           <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-400">
             On mobile, the button opens GPay / PhonePe / Paytm with <strong className="text-slate-900 dark:text-slate-200">₹{amountNum.toLocaleString("en-IN")}</strong> pre-filled.
-            On desktop, the payment page shows this QR. Template: <code className="text-emerald-600 dark:text-emerald-400">{stage.templateName}</code>
+            On desktop, the payment page shows this QR. Template: <code className="text-emerald-600 dark:text-emerald-400 font-mono">{stage.templateName}</code>
           </p>
         </div>
       </div>
