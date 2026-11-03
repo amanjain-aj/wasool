@@ -23,7 +23,11 @@ export function addDays(date: string, days: number): string {
 
 /** Whole days from `from` to `to` (positive when `to` is later). */
 export function daysBetween(from: string, to: string): number {
-  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / DAY_MS);
+  if (!from || !to) return 0;
+  const pFrom = Date.parse(`${from}T00:00:00Z`);
+  const pTo = Date.parse(`${to}T00:00:00Z`);
+  if (Number.isNaN(pFrom) || Number.isNaN(pTo)) return 0;
+  return Math.round((pTo - pFrom) / DAY_MS);
 }
 
 /** Positive = days past due, 0 = due today, negative = days until due. */
@@ -37,7 +41,10 @@ export function dispatchSlotISO(date: string): string {
 }
 
 export function formatDateIN(date: string): string {
-  return new Date(`${date}T00:00:00Z`).toLocaleDateString("en-IN", {
+  if (!date) return "-";
+  const d = new Date(`${date}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return String(date);
+  return d.toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -45,8 +52,10 @@ export function formatDateIN(date: string): string {
   });
 }
 
-export function formatINR(amount: number): string {
-  return amount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+export function formatINR(amount: number | string | null | undefined): string {
+  const num = typeof amount === "number" ? amount : Number(amount ?? 0);
+  if (Number.isNaN(num)) return "0.00";
+  return num.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 /**

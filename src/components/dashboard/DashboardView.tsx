@@ -39,17 +39,17 @@ interface DashboardViewProps {
 }
 
 export function DashboardView({
-  tenants: initialTenants,
+  tenants: initialTenants = [],
   initialTenantId,
-  invoices: initialInvoices,
-  recentDispatches: initialDispatches,
+  invoices: initialInvoices = [],
+  recentDispatches: initialDispatches = [],
   today,
   initialShowSetup = false,
 }: DashboardViewProps) {
-  const [tenants, setTenants] = useState(initialTenants);
+  const [tenants, setTenants] = useState(initialTenants || []);
   const [tenantId, setTenantId] = useState(initialTenantId);
-  const [invoices, setInvoices] = useState(initialInvoices);
-  const [dispatches, setDispatches] = useState(initialDispatches);
+  const [invoices, setInvoices] = useState(initialInvoices || []);
+  const [dispatches, setDispatches] = useState(initialDispatches || []);
   const [activeBucket, setActiveBucket] = useState<AgingBucket | "ALL">("ALL");
   const [search, setSearch] = useState("");
   const [selectedInvoice, setSelectedInvoice] = useState<InvoiceWithRelations | null>(null);
@@ -60,7 +60,7 @@ export function DashboardView({
   const [runningCron, setRunningCron] = useState(false);
   const [sendingNowId, setSendingNowId] = useState<string | null>(null);
 
-  const activeTenant = tenants.find((t) => t.id === tenantId) || tenants[0];
+  const activeTenant = tenants.find((t) => t.id === tenantId) || tenants[0] || null;
 
   // Refresh helper
   async function refreshData(tId = tenantId) {
@@ -163,9 +163,12 @@ export function DashboardView({
       RECOVERED: [],
       CLOSED: [],
     };
-    for (const inv of invoices) {
+    for (const inv of invoices || []) {
+      if (!inv) continue;
       const b = agingBucket(inv, today);
-      map[b].push(inv);
+      if (map[b]) {
+        map[b].push(inv);
+      }
     }
     return map;
   }, [invoices, today]);
@@ -175,13 +178,16 @@ export function DashboardView({
     let pendingAmt = 0;
     let recoveredAmt = 0;
     let atRiskAmt = 0;
-    for (const inv of invoices) {
+    for (const inv of invoices || []) {
+      if (!inv) continue;
+      const total = Number(inv.amount_total_inr) || 0;
+      const pending = Number(inv.amount_pending_inr) || 0;
       if (inv.status === "PAID") {
-        recoveredAmt += inv.amount_total_inr;
+        recoveredAmt += total;
       } else if (inv.status === "PENDING" || inv.status === "PARTIALLY_PAID") {
-        pendingAmt += inv.amount_pending_inr;
+        pendingAmt += pending;
         const d = daysOverdue(inv.due_date, today);
-        if (d > 7) atRiskAmt += inv.amount_pending_inr;
+        if (d > 7) atRiskAmt += pending;
       }
     }
     return { pendingAmt, recoveredAmt, atRiskAmt };
@@ -189,16 +195,17 @@ export function DashboardView({
 
   // Filtered invoices
   const filtered = useMemo(() => {
-    return invoices.filter((inv) => {
+    return (invoices || []).filter((inv) => {
+      if (!inv) return false;
       if (activeBucket !== "ALL") {
         if (agingBucket(inv, today) !== activeBucket) return false;
       }
       if (search.trim()) {
         const q = search.toLowerCase();
         return (
-          inv.invoice_number.toLowerCase().includes(q) ||
-          inv.debtor.client_name.toLowerCase().includes(q) ||
-          inv.debtor.phone.includes(q)
+          inv.invoice_number?.toLowerCase().includes(q) ||
+          inv.debtor?.client_name?.toLowerCase().includes(q) ||
+          inv.debtor?.phone?.includes(q)
         );
       }
       return true;
@@ -375,13 +382,16 @@ export function DashboardView({
                 filtered.map((inv) => {
                   const overdueDays = daysOverdue(inv.due_date, today);
                   const isPaid = inv.status === "PAID";
-                  const nextDispatch = inv.dispatches.find((d) => d.delivery_status === "QUEUED");
+                  const dispatchesList = Array.isArray(inv.dispatches) ? inv.dispatches : [];
+                  const nextDispatch = dispatchesList.find((d) => d.delivery_status === "QUEUED");
+                  const clientName = inv.debtor?.client_name || "Unknown Party";
+                  const clientPhone = inv.debtor?.phone || "No phone";
 
                   return (
                     <tr key={inv.id} className="hover:bg-slate-800/30 transition">
                       <td className="px-4 py-3">
-                        <div className="font-semibold text-white">{inv.debtor.client_name}</div>
-                        <div className="text-[11px] text-slate-500">{inv.debtor.phone}</div>
+                        <div className="font-semibold text-white">{clientName}</div>
+                        <div className="text-[11px] text-slate-500">{clientPhone}</div>
                       </td>
                       <td className="px-4 py-3 font-mono text-emerald-400">
                         {inv.invoice_number}
@@ -423,7 +433,7 @@ export function DashboardView({
                         )}
                         {nextDispatch && (
                           <div className="mt-1 text-[10px] text-slate-400">
-                            Next: {nextDispatch.tier.replace("T_", "").toLowerCase()} on {nextDispatch.scheduled_for}
+                            Next: {nextDispatch.tier?.replace("T_", "").toLowerCase()} on {nextDispatch.scheduled_for}
                           </div>
                         )}
                       </td>
@@ -488,17 +498,17 @@ export function DashboardView({
           <span className="text-xs text-slate-500">Last 25 dispatched events</span>
         </div>
         <div className="space-y-2">
-          {dispatches.length === 0 ? (
+          {(dispatches || []).length === 0 ? (
             <p className="text-xs text-slate-500">No WhatsApp messages dispatched yet.</p>
           ) : (
-            dispatches.map((d) => (
+            (dispatches || []).map((d) => (
               <div
                 key={d.id}
                 className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-xl border border-slate-800/80 bg-slate-950/40 px-3 py-2 text-xs"
               >
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-emerald-400">{d.invoice_number}</span>
-                  <span className="text-slate-300">{d.client_name}</span>
+                  <span className="font-mono text-emerald-400">{d.invoice_number || "—"}</span>
+                  <span className="text-slate-300">{d.client_name || "—"}</span>
                   <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-400">
                     {d.tier}
                   </span>

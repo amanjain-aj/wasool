@@ -13,7 +13,19 @@ import type {
 } from "@/types/wasool";
 
 export type InvoicePatch = Partial<
-  Pick<Invoice, "status" | "amount_pending_inr" | "payment_link_url" | "utr_reference" | "autopilot_enabled">
+  Pick<
+    Invoice,
+    | "status"
+    | "amount_pending_inr"
+    | "payment_link_url"
+    | "utr_reference"
+    | "autopilot_enabled"
+    | "batch_import_id"
+    | "doc_type"
+    | "media_storage_url"
+    | "media_mime_type"
+    | "amount_kattauti_tds_inr"
+  >
 >;
 
 export type DispatchPatch = Partial<
@@ -79,4 +91,11 @@ export interface WasoolStore {
   }): Promise<any>;
   getReconciliation(id: string): Promise<any | null>;
   updateReconciliation(id: string, patch: any): Promise<void>;
+
+  // v2.1 WhatsApp Munshi Additions
+  getSessionContext(senderPhone: string): Promise<any | null>;
+  setSessionContext(senderPhone: string, tenantId: string, patch: any): Promise<void>;
+  clearSessionContext(senderPhone: string): Promise<void>;
+  approveBatch(batchImportId: string): Promise<number>;
+  findDebtorByNameFuzzy(tenantId: string, name: string): Promise<Debtor | null>;
 }

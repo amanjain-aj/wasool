@@ -8,9 +8,19 @@ export const dynamic = "force-dynamic";
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tenant?: string; setup?: string }>;
+  searchParams?: Promise<{ tenant?: string; setup?: string }>;
 }) {
-  const { tenant: queryTenantId, setup } = await searchParams;
+  let queryTenantId: string | undefined;
+  let setup: string | undefined;
+
+  try {
+    const sp = searchParams ? await searchParams : {};
+    queryTenantId = typeof sp?.tenant === "string" ? sp.tenant : undefined;
+    setup = typeof sp?.setup === "string" ? sp.setup : undefined;
+  } catch {
+    /* fallback on searchParams resolution */
+  }
+
   let tenants: any[] = [];
   let selectedTenant: any = null;
   let invoices: any[] = [];
@@ -21,14 +31,23 @@ export default async function DashboardPage({
 
   try {
     const store = getStore();
-    tenants = await store.listTenants();
-    selectedTenant = tenants.find((t) => t.id === queryTenantId) || tenants[0];
+    const loadedTenants = await store.listTenants();
+    tenants = Array.isArray(loadedTenants) ? loadedTenants : [];
+    selectedTenant = (queryTenantId ? tenants.find((t) => t.id === queryTenantId) : null) || tenants[0] || null;
 
-    if (selectedTenant) {
-      [invoices, recentDispatches] = await Promise.all([
-        store.listInvoices(selectedTenant.id),
-        store.listRecentDispatches(25, selectedTenant.id),
+    if (selectedTenant?.id) {
+      const [invList, dispList] = await Promise.all([
+        store.listInvoices(selectedTenant.id).catch((err) => {
+          console.error("[listInvoices error]", err);
+          return [];
+        }),
+        store.listRecentDispatches(25, selectedTenant.id).catch((err) => {
+          console.error("[listRecentDispatches error]", err);
+          return [];
+        }),
       ]);
+      invoices = Array.isArray(invList) ? invList : [];
+      recentDispatches = Array.isArray(dispList) ? dispList : [];
     }
   } catch (err) {
     console.error("[Dashboard Load Error]", err);
@@ -104,7 +123,7 @@ export default async function DashboardPage({
         ) : (
           <DashboardView
             tenants={tenants}
-            initialTenantId={selectedTenant.id}
+            initialTenantId={selectedTenant?.id || ""}
             invoices={invoices}
             recentDispatches={recentDispatches}
             today={today}

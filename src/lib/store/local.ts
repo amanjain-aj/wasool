@@ -338,6 +338,70 @@ export function createLocalStore(): WasoolStore {
         Object.assign(r, patch);
         persist();
       }
+    },
+
+    async getSessionContext(senderPhone: string) {
+      const clean = senderPhone.replace(/\D/g, "");
+      const db = load();
+      const sessions = (db as any).whatsapp_session_context || [];
+      const session = sessions.find((s: any) => s.sender_phone.replace(/\D/g, "").endsWith(clean.slice(-10)));
+      return clone(session ?? null);
+    },
+
+    async setSessionContext(senderPhone: string, tenantId: string, patch: any) {
+      const db = load();
+      if (!(db as any).whatsapp_session_context) (db as any).whatsapp_session_context = [];
+      const sessions = (db as any).whatsapp_session_context;
+      const clean = senderPhone.replace(/\D/g, "");
+      const existing = sessions.find((s: any) => s.sender_phone.replace(/\D/g, "").endsWith(clean.slice(-10)));
+      if (existing) {
+        Object.assign(existing, patch, { tenant_id: tenantId, updated_at: new Date().toISOString() });
+      } else {
+        sessions.push({
+          sender_phone: senderPhone,
+          tenant_id: tenantId,
+          last_shared_contact_name: null,
+          last_shared_contact_phone: null,
+          pending_invoice_id: null,
+          ...patch,
+          updated_at: new Date().toISOString()
+        });
+      }
+      persist();
+    },
+
+    async clearSessionContext(senderPhone: string) {
+      const db = load();
+      if ((db as any).whatsapp_session_context) {
+        const clean = senderPhone.replace(/\D/g, "");
+        (db as any).whatsapp_session_context = (db as any).whatsapp_session_context.filter(
+          (s: any) => !s.sender_phone.replace(/\D/g, "").endsWith(clean.slice(-10))
+        );
+        persist();
+      }
+    },
+
+    async approveBatch(batchImportId: string) {
+      const db = load();
+      let count = 0;
+      for (const inv of db.invoices) {
+        if ((inv as any).batch_import_id === batchImportId && (inv.status === "AWAITING_OWNER_APPROVAL" || inv.status === "PAUSED")) {
+          inv.status = "PENDING";
+          inv.autopilot_enabled = true;
+          count++;
+        }
+      }
+      if (count > 0) persist();
+      return count;
+    },
+
+    async findDebtorByNameFuzzy(tenantId: string, name: string) {
+      const cleanName = name.trim().toLowerCase();
+      const db = load();
+      const d = db.debtors.find(
+        (x) => x.tenant_id === tenantId && (x.client_name.toLowerCase().includes(cleanName) || cleanName.includes(x.client_name.toLowerCase()))
+      );
+      return clone(d ?? null);
     }
   };
 }

@@ -17,18 +17,19 @@ const STATUS_STYLE: Record<string, string> = {
 };
 
 export function PreviewPanel({ invoice, today }: { invoice: InvoiceWithRelations; today: string }) {
-  const nextQueued = invoice.dispatches.find((d) => d.delivery_status === "QUEUED");
-  const defaultTier = nextQueued?.tier ?? stageForToday(invoice.due_date, today).tier;
+  const dispatchesList = Array.isArray(invoice.dispatches) ? invoice.dispatches : [];
+  const nextQueued = dispatchesList.find((d) => d.delivery_status === "QUEUED");
+  const defaultTier = nextQueued?.tier ?? stageForToday(invoice.due_date || today, today).tier;
   const [tier, setTier] = useState(defaultTier);
-  const stage = STAGE_BY_TIER[tier];
+  const stage = STAGE_BY_TIER[tier] || ESCALATION_STAGES[0];
   const upi = invoice.payment_link_url ?? "";
 
   const text = renderTemplate(stage, {
-    clientName: invoice.debtor.contact_person || invoice.debtor.client_name,
-    brandName: invoice.tenant.brand_display_name,
-    invoiceNumber: invoice.invoice_number,
-    amountPending: invoice.amount_pending_inr,
-    dueDate: invoice.due_date,
+    clientName: invoice.debtor?.contact_person || invoice.debtor?.client_name || "Client",
+    brandName: invoice.tenant?.brand_display_name || "Wasool",
+    invoiceNumber: invoice.invoice_number || "",
+    amountPending: Number(invoice.amount_pending_inr) || 0,
+    dueDate: invoice.due_date || today,
   });
 
   return (
@@ -47,9 +48,9 @@ export function PreviewPanel({ invoice, today }: { invoice: InvoiceWithRelations
             </button>
           ))}
         </div>
-        <WhatsAppBubble sender={invoice.tenant.brand_display_name} text={text} buttonHref={`/pay/${invoice.id}`} />
+        <WhatsAppBubble sender={invoice.tenant?.brand_display_name || "Wasool"} text={text} buttonHref={`/pay/${invoice.id}`} />
         <div className="text-xs text-slate-500">
-          To: <span className="font-mono text-slate-300">{invoice.debtor.phone}</span> • Template{" "}
+          To: <span className="font-mono text-slate-300">{invoice.debtor?.phone || "—"}</span> • Template{" "}
           <code className="text-emerald-400">{stage.templateName}</code>
         </div>
       </div>

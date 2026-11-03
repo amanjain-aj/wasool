@@ -29,7 +29,7 @@ export default async function PayPage({ params }: { params: Promise<{ id: string
         <div className="my-6 rounded-2xl bg-slate-950 p-5">
           <div className="text-xs text-slate-400">Invoice #{inv.invoice_number} • Due {formatDateIN(inv.due_date)}</div>
           <div className="mt-2 text-4xl font-extrabold text-white">₹{formatINR(paid ? inv.amount_total_inr : inv.amount_pending_inr)}</div>
-          <div className="mt-1 text-xs text-slate-500">Billed to {inv.debtor.client_name}</div>
+          <div className="mt-1 text-xs text-slate-500">Billed to {inv.debtor?.client_name || "Client"}</div>
         </div>
 
         {paid ? (

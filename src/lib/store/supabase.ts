@@ -221,6 +221,44 @@ export function createSupabaseStore(url: string, serviceRoleKey: string): Wasool
 
     async updateReconciliation(id: string, patch: any) {
       await db.from("payment_reconciliations").update(patch).eq("id", id);
+    },
+
+    async getSessionContext(senderPhone: string) {
+      const { data } = await db.from("whatsapp_session_context").select("*").eq("sender_phone", senderPhone).maybeSingle();
+      return data || null;
+    },
+
+    async setSessionContext(senderPhone: string, tenantId: string, patch: any) {
+      await db.from("whatsapp_session_context").upsert({
+        sender_phone: senderPhone,
+        tenant_id: tenantId,
+        ...patch,
+        updated_at: new Date().toISOString()
+      }, { onConflict: "sender_phone" });
+    },
+
+    async clearSessionContext(senderPhone: string) {
+      await db.from("whatsapp_session_context").delete().eq("sender_phone", senderPhone);
+    },
+
+    async approveBatch(batchImportId: string) {
+      const { data, error } = await db
+        .from("invoices")
+        .update({ status: "PENDING", autopilot_enabled: true })
+        .eq("batch_import_id", batchImportId)
+        .select("id");
+      return data?.length || 0;
+    },
+
+    async findDebtorByNameFuzzy(tenantId: string, name: string) {
+      const { data } = await db
+        .from("debtors")
+        .select("*")
+        .eq("tenant_id", tenantId)
+        .ilike("client_name", `%${name.trim()}%`)
+        .limit(1)
+        .maybeSingle();
+      return data || null;
     }
   };
 }

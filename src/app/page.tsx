@@ -1,7 +1,25 @@
 // app/page.tsx — Optimized for both Light and Dark mode with enhanced UI and theme toggle.
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ShieldCheck, Zap, Receipt, PhoneOff, Code2, MessageSquareText, Lock } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  CheckCircle2,
+  ChevronDown,
+  Code2,
+  FileSpreadsheet,
+  FileText,
+  HelpCircle,
+  Lock,
+  MessageSquareText,
+  PhoneOff,
+  Receipt,
+  ShieldCheck,
+  Smartphone,
+  Table,
+  UserCheck,
+  Zap,
+} from "lucide-react";
 import { LiveMessagePreview } from "@/components/LiveMessagePreview";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -19,10 +37,11 @@ export default function LandingPage() {
           Wasool<span className="text-emerald-500">.io</span>
         </div>
         <nav className="hidden md:flex space-x-8 text-sm text-slate-600 dark:text-slate-400 font-medium">
+          <a href="#how-it-works" className="hover:text-emerald-600 dark:hover:text-white transition">How It Works</a>
           <a href="#features" className="hover:text-emerald-600 dark:hover:text-white transition">Features</a>
           <a href="#preview" className="hover:text-emerald-600 dark:hover:text-white transition">Live Preview</a>
-          <a href="#pricing" className="hover:text-emerald-600 dark:hover:text-white transition">Pricing (INR)</a>
-          <a href="#partner-api" className="hover:text-emerald-600 dark:hover:text-white transition">Partner API (Khatabook/ERP)</a>
+          <a href="#pricing" className="hover:text-emerald-600 dark:hover:text-white transition">Pricing</a>
+          <a href="#faq" className="hover:text-emerald-600 dark:hover:text-white transition">FAQ</a>
         </nav>
         <div className="flex items-center gap-3">
           <ThemeToggle />
@@ -74,6 +93,89 @@ export default function LandingPage() {
           >
             Explore Embedded Partner API
           </a>
+        </div>
+      </section>
+
+      {/* Unified Ingestion Matrix */}
+      <section id="how-it-works" className="max-w-6xl mx-auto px-6 py-20 border-t border-slate-200 dark:border-slate-900">
+        <div className="text-center mb-14">
+          <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+            Works With Everything You Already Use
+          </span>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">
+            Zero App Download. Zero Excel Required.
+          </h2>
+          <p className="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-xl mx-auto">
+            Whether you use a paper diary, Khatabook, Vyapar, or Tally—just forward whatever you have on WhatsApp.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:border-emerald-500/50 transition">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <div className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1">Pure Offline</div>
+            <h3 className="font-bold text-slate-900 dark:text-white text-base mb-2">Snap Photo of Udhaar Diary</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Take a quick photo of your handwritten bahi-khata. Vision AI extracts 10–20 client rows in one shot and queues diplomatic follow-ups.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:border-emerald-500/50 transition">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
+              <UserCheck className="w-5 h-5" />
+            </div>
+            <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">On-the-Go Seth</div>
+            <h3 className="font-bold text-slate-900 dark:text-white text-base mb-2">Share WhatsApp Contact Card</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Share the debtor&apos;s contact card directly in WhatsApp + voice note (&quot;45,000, 15 din&quot;). Wasool pairs the contact and schedules reminders.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:border-emerald-500/50 transition">
+            <div className="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center mb-4">
+              <Receipt className="w-5 h-5" />
+            </div>
+            <div className="text-xs font-bold text-sky-600 dark:text-sky-400 uppercase tracking-wider mb-1">Paper Bill Pad</div>
+            <h3 className="font-bold text-slate-900 dark:text-white text-base mb-2">Snap Carbon-Copy Challan</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Snap a picture of the signed delivery challan or estimate slip. Wasool attaches the signed slip in every reminder header.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:border-emerald-500/50 transition">
+            <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center mb-4">
+              <Smartphone className="w-5 h-5" />
+            </div>
+            <div className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider mb-1">Khatabook / Vyapar</div>
+            <h3 className="font-bold text-slate-900 dark:text-white text-base mb-2">Forward Ledger PDF Report</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Tap &quot;Share PDF on WhatsApp&quot; inside your bookkeeping app and forward to Wasool. Ingests all overdue parties with a 1-tap owner approval card.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:border-emerald-500/50 transition">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4">
+              <FileSpreadsheet className="w-5 h-5" />
+            </div>
+            <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-1">Tally / Excel</div>
+            <h3 className="font-bold text-slate-900 dark:text-white text-base mb-2">Forward GST PDF or .xlsx</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Forward your CA&apos;s sales register or Tally invoice PDF directly in WhatsApp. Gemini AI parses all invoice lines without manual data entry.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:border-emerald-500/50 transition">
+            <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-4">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div className="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider mb-1">Delegated Staff</div>
+            <h3 className="font-bold text-slate-900 dark:text-white text-base mb-2">Interactive Owner Approval</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Staff can submit bills via WhatsApp. You receive an interactive [✅ Start Munshi] [✏️ Edit] [❌ Cancel] card on your WhatsApp before anything sends.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -179,6 +281,83 @@ export default function LandingPage() {
               Start 14-Day Free Trial
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* 6-Question B2B FAQ */}
+      <section id="faq" className="max-w-4xl mx-auto px-6 py-20 border-t border-slate-200 dark:border-slate-900">
+        <div className="text-center mb-14">
+          <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+            Frequently Asked Questions
+          </span>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">
+            Common Questions from Business Owners
+          </h2>
+          <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">
+            Everything you need to know about setting up Wasool Munshi for your business.
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          <details className="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 transition">
+            <summary className="flex items-center justify-between font-bold text-slate-900 dark:text-white cursor-pointer list-none text-base">
+              <span>Mere clients bura toh nahi maanenge?</span>
+              <ChevronDown className="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" />
+            </summary>
+            <p className="mt-4 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Bilkul nahi. Wasool uses diplomatic utility templates approved by Meta. Reminders arrive under your official business display name, polite and professional. It frames follow-ups around monthly ledger reconciliation and invoice records rather than aggressive recovery.
+            </p>
+          </details>
+
+          <details className="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 transition">
+            <summary className="flex items-center justify-between font-bold text-slate-900 dark:text-white cursor-pointer list-none text-base">
+              <span>Agar buyer ne part payment kiya ya TDS/kaat-chhaat kiya toh?</span>
+              <ChevronDown className="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" />
+            </summary>
+            <p className="mt-4 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              When a buyer forwards a bank payment screenshot or cheque photo, Vision AI extracts the UTR number and amount. You receive an instant WhatsApp prompt: <code>[✅ Confirm Full]</code>, <code>[➗ Record Part-Payment]</code>, or <code>[❌ Not Received]</code>. On part-payment, Wasool recalculates the balance and updates the dynamic UPI link.
+            </p>
+          </details>
+
+          <details className="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 transition">
+            <summary className="flex items-center justify-between font-bold text-slate-900 dark:text-white cursor-pointer list-none text-base">
+              <span>Kya mujhe roz computer ya dashboard kholna padega?</span>
+              <ChevronDown className="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" />
+            </summary>
+            <p className="mt-4 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Bilkul nahi. Wasool v2.1 is 100% headless on WhatsApp. You receive a daily 9:30 AM Tagada summary, approve bills, track recoveries, and hold reminders right from your phone. The web dashboard is optional for CA reporting.
+            </p>
+          </details>
+
+          <details className="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 transition">
+            <summary className="flex items-center justify-between font-bold text-slate-900 dark:text-white cursor-pointer list-none text-base">
+              <span>Agar mere dispatch ladke ya munim ne galat bill bhej diya toh?</span>
+              <ChevronDown className="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" />
+            </summary>
+            <p className="mt-4 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Staff submissions trigger an interactive Owner Approval Card on the business owner&apos;s WhatsApp with <code>[✅ Start Munshi]</code>, <code>[✏️ Edit]</code>, and <code>[❌ Cancel]</code>. Outbound reminders never dispatch until you tap approve.
+            </p>
+          </details>
+
+          <details className="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 transition">
+            <summary className="flex items-center justify-between font-bold text-slate-900 dark:text-white cursor-pointer list-none text-base">
+              <span>Main pehle se Khatabook ya Vyapar use kar raha hu, kya mujhe switch karna padega?</span>
+              <ChevronDown className="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" />
+            </summary>
+            <p className="mt-4 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Nahi, switch karne ki koi zaroorat nahi hai. Simply tap &quot;Share PDF on WhatsApp&quot; inside Khatabook or Vyapar and forward the report to Wasool Munshi. It auto-extracts all overdue parties into automated follow-ups.
+            </p>
+          </details>
+
+          <details className="group bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 transition">
+            <summary className="flex items-center justify-between font-bold text-slate-900 dark:text-white cursor-pointer list-none text-base">
+              <span>Data security aur mere bank account ka access kis kiske paas hoga?</span>
+              <ChevronDown className="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" />
+            </summary>
+            <p className="mt-4 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Wasool never holds your funds and never asks for your netbanking passwords or card details. Settlements go directly peer-to-peer (P2P) from the buyer&apos;s UPI app to your registered UPI VPA or bank account. All data is encrypted with enterprise 256-bit standards.
+            </p>
+          </details>
         </div>
       </section>
 

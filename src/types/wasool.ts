@@ -8,6 +8,7 @@ export type InvoiceStatus =
   | "DISPUTED"
   | "CANCELLED"
   | "AWAITING_OWNER_APPROVAL"
+  | "AWAITING_CONTACT_CARD"
   | "PAUSED";
 export type ReminderTier =
   | "T_MINUS_2_COURTESY"
@@ -17,7 +18,13 @@ export type ReminderTier =
   | "T_PLUS_15_SUSPENSION_ALERT";
 export type DeliveryStatus = "QUEUED" | "SENT" | "DELIVERED" | "READ" | "FAILED" | "SKIPPED";
 export type PlanTier = "starter" | "growth" | "partner_embedded" | "munshi_standard" | "munshi_vyapar_pro";
-export type BillDocType = "GST_INVOICE" | "DELIVERY_CHALLAN" | "KACCHA_ESTIMATE" | "VOICE_ENTRY";
+export type BillDocType =
+  | "GST_INVOICE"
+  | "DELIVERY_CHALLAN"
+  | "KACCHA_ESTIMATE"
+  | "VOICE_ENTRY"
+  | "KHATABOOK_REPORT"
+  | "HANDWRITTEN_DIARY";
 export type SettlementStatus = "PENDING_OWNER_CONFIRMATION" | "CONFIRMED" | "REJECTED";
 
 export interface Tenant {
@@ -86,11 +93,21 @@ export interface Invoice {
   utr_reference: string | null;
   autopilot_enabled: boolean;
   submitted_by_phone?: string | null;
+  batch_import_id?: string | null;
   doc_type?: BillDocType | null;
   media_storage_url?: string | null;
   media_mime_type?: string | null;
   amount_kattauti_tds_inr?: number;
   created_at: string;
+}
+
+export interface WhatsAppSessionContext {
+  sender_phone: string;
+  tenant_id: string;
+  last_shared_contact_name: string | null;
+  last_shared_contact_phone: string | null;
+  pending_invoice_id: string | null;
+  updated_at: string;
 }
 
 export interface PaymentReconciliation {

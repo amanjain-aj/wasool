@@ -152,6 +152,55 @@ export async function sendOwnerApprovalMessage(
   );
 }
 
+/** Sends interactive bulk batch approval card (e.g. Khatabook PDF or Diary Page) */
+export async function sendOwnerBatchApprovalMessage(
+  ownerPhone: string,
+  batchImportId: string,
+  summary: {
+    totalParties: number;
+    totalAmount: number;
+    docType: string;
+    sampleParties: string[];
+  }
+) {
+  if (!isWhatsAppLive()) {
+    console.info(`[munshi-batch-approval:dry-run] Batch ${batchImportId} (${summary.totalParties} parties, ₹${summary.totalAmount}) sent to ${ownerPhone}`);
+    return;
+  }
+
+  const sampleList = summary.sampleParties.slice(0, 3).map((p, i) => `${i + 1}. ${p}`).join("\n");
+  const bodyText = `📑 *Bulk Import: ${summary.totalParties} Parties Detected*\n\n` +
+    `• Document: *${summary.docType}*\n` +
+    `• Total Receivable: *₹${summary.totalAmount.toLocaleString("en-IN")}*\n` +
+    `• Sample Entries:\n${sampleList}\n\n` +
+    `Kya sabhi ${summary.totalParties} parties ke liye automated follow-up shuru karein?`;
+
+  return await axios.post(
+    `https://graph.facebook.com/v21.0/${process.env.META_PHONE_NUMBER_ID}/messages`,
+    {
+      messaging_product: "whatsapp",
+      to: ownerPhone.replace("+", ""),
+      type: "interactive",
+      interactive: {
+        type: "button",
+        body: { text: bodyText },
+        action: {
+          buttons: [
+            { type: "reply", reply: { id: `APPROVE_BATCH_${batchImportId}`, title: `✅ Start All (${summary.totalParties})` } },
+            { type: "reply", reply: { id: `CANCEL_BATCH_${batchImportId}`, title: "❌ Cancel All" } }
+          ]
+        }
+      }
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.META_SYSTEM_USER_TOKEN}`,
+        "Content-Type": "application/json"
+      }
+    }
+  );
+}
+
 /** Sends interactive confirmation to owner when a debtor reports payment */
 export async function sendOwnerReconciliationPrompt(
   ownerPhone: string,
