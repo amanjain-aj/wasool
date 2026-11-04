@@ -6,7 +6,14 @@ import type { WasoolStore } from "./types";
 type Res<T> = { data: T | null; error: { message: string } | null };
 
 function must<T>(res: Res<T>, ctx: string): T {
-  if (res.error) throw new Error(`[supabase:${ctx}] ${res.error.message}`);
+  if (res.error) {
+    if (res.error.message.includes("row-level security policy")) {
+      throw new Error(
+        `[supabase:${ctx}] ${res.error.message}. TIP: Run 'supabase/migrations/20261104_fix_tenants_rls.sql' in Supabase SQL Editor, or check that SUPABASE_SERVICE_ROLE_KEY is the secret 'service_role' key (not the public 'anon' key).`
+      );
+    }
+    throw new Error(`[supabase:${ctx}] ${res.error.message}`);
+  }
   return res.data as T;
 }
 
@@ -25,6 +32,23 @@ function normRelations(row: InvoiceWithRelations): InvoiceWithRelations {
 const INVOICE_WITH_RELATIONS = "*, debtor:debtors(*), tenant:tenants(*), dispatches:reminder_dispatches(*)";
 
 export function createSupabaseStore(url: string, serviceRoleKey: string): WasoolStore {
+  if (serviceRoleKey) {
+    try {
+      const parts = serviceRoleKey.split(".");
+      if (parts.length === 3) {
+        const payload = JSON.parse(Buffer.from(parts[1], "base64").toString("utf8"));
+        if (payload.role === "anon") {
+          console.warn(
+            "\x1b[33m%s\x1b[0m",
+            "⚠️ [Wasool Supabase Warning] SUPABASE_SERVICE_ROLE_KEY has role 'anon'! You are using the public anon key on the backend instead of the secret 'service_role' key. This will trigger Row-Level Security (RLS) errors. Please use the secret 'service_role' key from Supabase Dashboard > Project Settings > API, or run 'supabase/migrations/20261104_fix_tenants_rls.sql'."
+          );
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+
   const db = createClient(url, serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
 
   return {
