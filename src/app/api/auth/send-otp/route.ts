@@ -5,6 +5,24 @@ import { isSupabaseConfigured, env } from "@/lib/config";
 import { createClient } from "@supabase/supabase-js";
 import { getStore } from "@/lib/store";
 
+function getRequestOrigin(req: NextRequest): string {
+  // 1. If explicit production APP_URL is configured (not localhost), use it
+  const appUrl = env.appUrl();
+  if (appUrl && !appUrl.includes("localhost")) {
+    return appUrl;
+  }
+
+  // 2. Extract from reverse-proxy headers (Vercel, Cloudflare, Railway, Nginx)
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host");
+  const proto = req.headers.get("x-forwarded-proto") || (host && !host.includes("localhost") ? "https" : "http");
+
+  if (host && !host.includes("localhost")) {
+    return `${proto}://${host}`;
+  }
+
+  return req.nextUrl.origin || appUrl || "http://localhost:3000";
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { email } = await readJson<{ email: string }>(req);
@@ -22,7 +40,7 @@ export async function POST(req: NextRequest) {
         { auth: { persistSession: false } }
       );
 
-      const origin = req.nextUrl.origin || env.appUrl();
+      const origin = getRequestOrigin(req);
       const { error } = await supabase.auth.signInWithOtp({
         email: cleanEmail,
         options: {

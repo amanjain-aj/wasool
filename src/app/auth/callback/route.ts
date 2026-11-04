@@ -3,8 +3,22 @@ import { createServerClient } from "@supabase/ssr";
 import { env, isSupabaseConfigured } from "@/lib/config";
 import { getStore } from "@/lib/store";
 
+function getCallbackOrigin(req: NextRequest): string {
+  const appUrl = env.appUrl();
+  if (appUrl && !appUrl.includes("localhost")) {
+    return appUrl;
+  }
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host");
+  const proto = req.headers.get("x-forwarded-proto") || (host && !host.includes("localhost") ? "https" : "http");
+  if (host && !host.includes("localhost")) {
+    return `${proto}://${host}`;
+  }
+  return new URL(req.url).origin || appUrl || "http://localhost:3000";
+}
+
 export async function GET(req: NextRequest) {
-  const { searchParams, origin } = new URL(req.url);
+  const { searchParams } = new URL(req.url);
+  const origin = getCallbackOrigin(req);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/dashboard";
 
