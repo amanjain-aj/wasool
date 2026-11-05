@@ -381,10 +381,18 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-900 py-8 pb-24 sm:pb-8 text-center text-xs text-slate-500">
-        © {new Date().getFullYear()} Wasool.io • Made for Indian B2B •{" "}
-        <Link href="/partner-docs" className="hover:text-emerald-600 dark:hover:text-slate-300">Partner API</Link> •{" "}
-        <Link href="/dashboard" className="hover:text-emerald-600 dark:hover:text-slate-300">Dashboard</Link>
+      <footer className="border-t border-slate-200 dark:border-slate-900 py-10 pb-24 sm:pb-10 text-center text-xs text-slate-500 max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-4 font-medium text-slate-600 dark:text-slate-400">
+          <Link href="/privacy" className="hover:text-emerald-500 transition">Privacy Policy</Link>
+          <Link href="/terms" className="hover:text-emerald-500 transition">Terms of Service</Link>
+          <Link href="/refund" className="hover:text-emerald-500 transition">Refund &amp; Cancellation</Link>
+          <Link href="/contact" className="hover:text-emerald-500 transition">Contact &amp; Grievance</Link>
+          <Link href="/partner-docs" className="hover:text-emerald-500 transition">Partner API</Link>
+          <Link href="/dashboard" className="hover:text-emerald-500 transition">Merchant Portal</Link>
+        </div>
+        <p className="text-[11px] text-slate-500">
+          © {new Date().getFullYear()} Wasool Technologies India Pvt Ltd. All rights reserved. • NPCI UPI &amp; Meta WhatsApp Cloud API Compliant.
+        </p>
       </footer>
 
       {/* Mobile-Only Sticky Floating Quick Action Bar */}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Lock, Menu, X, ArrowRight } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { BrandLogo } from "./BrandLogo";
 
 export function LandingHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,9 +25,7 @@ export function LandingHeader() {
     <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-slate-50/90 dark:bg-slate-950/90 border-b border-slate-200/70 dark:border-slate-800/70">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
-          Wasool<span className="text-emerald-500">.io</span>
-        </Link>
+        <BrandLogo size="sm" />
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-7 text-sm text-slate-600 dark:text-slate-400 font-medium">

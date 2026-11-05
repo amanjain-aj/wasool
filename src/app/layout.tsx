@@ -2,9 +2,24 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Wasool.io — Autopilot WhatsApp Payment Recovery with 1-Tap UPI",
+  title: "Wasool.io — 24/7 Digital WhatsApp Munshi with 1-Tap UPI",
   description:
-    "Automated, diplomatic WhatsApp payment reminders with 1-tap UPI links—get paid 2.5x faster without awkward phone calls.",
+    "Automated, diplomatic WhatsApp payment reminders with original bill media attachment & 1-tap UPI deep links. Get paid 2.5x faster without awkward calls.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/icon.svg",
+  },
+  manifest: "/manifest.json",
+  openGraph: {
+    title: "Wasool.io — 24/7 Digital WhatsApp Munshi with 1-Tap UPI",
+    description:
+      "Automated, diplomatic WhatsApp payment recovery for Indian B2B agencies, wholesalers, and manufacturers. Direct NPCI UPI deep links.",
+    url: "https://wasool.io",
+    siteName: "Wasool.io",
+    locale: "en_IN",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

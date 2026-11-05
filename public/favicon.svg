@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="wasool-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3" flood-color="#047857" />
+    </filter>
+  </defs>
+  <!-- WhatsApp Munshi Chat Bubble -->
+  <path d="M32 6C17.64 6 6 17.64 6 32c0 4.62 1.21 9 3.34 12.82L6 58l13.62-3.32C23.32 56.76 27.52 58 32 58c14.36 0 26-11.64 26-26S46.36 6 32 6z" fill="url(#wasool-grad)" filter="url(#shadow)" />
+  <!-- Rupee Symbol + Munshi Check Accent in Crisp White -->
+  <!-- Top Bar 1 -->
+  <line x1="22" y1="20" x2="42" y2="20" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+  <!-- Top Bar 2 -->
+  <line x1="22" y1="26" x2="38" y2="26" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+  <!-- Central Stem & Upper Curve -->
+  <path d="M28 20v24M28 26c6 0 10 2 10 7s-4 7-10 7" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <!-- Lower Downward Diagonal -->
+  <path d="M28 40l12 12" stroke="#ffffff" stroke-width="4" stroke-linecap="round" fill="none" />
+  <!-- Checkmark Badge on bottom right -->
+  <circle cx="48" cy="46" r="11" fill="#f59e0b" />
+  <path d="M43 46l3.5 3.5 7-7" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+</svg>

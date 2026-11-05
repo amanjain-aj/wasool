@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LoginForm } from "./LoginForm";
 import { ShieldCheck } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export const metadata = {
   title: "Merchant Login — Wasool.io",
@@ -10,10 +11,8 @@ export const metadata = {
 export default function LoginPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
-      <div className="mb-8 text-center">
-        <Link href="/" className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-          Wasool<span className="text-emerald-500">.io</span>
-        </Link>
+      <div className="mb-8 text-center flex flex-col items-center">
+        <BrandLogo size="lg" />
         <h1 className="mt-4 text-xl font-bold text-slate-900 dark:text-white">Sign In to Wasool Dashboard</h1>
         <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
           Instant passwordless access for agencies, vendors, and finance teams.
